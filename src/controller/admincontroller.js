@@ -228,9 +228,8 @@ export const addSaving = async (req, res, next) => {
 /*--------- Edit Saving ---------*/
 export const editSaving = async (req, res, next) => {
     try {
-        const { id, title, description } = req.body;
-
-        const saving = await SavingModel.findById(id);
+        const { _id, title, description } = req.body;
+        const saving = await SavingModel.findOne({ _id: _id });
         if (!saving)
             return res.status(404).json({ success: false, message: "Saving not found" });
 

@@ -28,13 +28,13 @@ adminRouter.delete('/delete-benefit/:id', authentication, authorization(['admin'
 
 /*------------------saving------------------*/
 adminRouter.get('/get-saving', authentication, authorization(['admin']), getSaving)
+adminRouter.patch('/saving', authentication, authorization(['admin']), upload.single("image"), editSaving)
 adminRouter.post('/saving', authentication, authorization(['admin']), upload.single("image"), addSaving)
-adminRouter.patch('/edit-saving', authentication, authorization(['admin']), editSaving)
-adminRouter.delete("/delete-saving/:id", authentication, authorization(['admin']), upload.single("image"), deleteSaving)
+adminRouter.delete("/delete-saving/:id", authentication, authorization(['admin']), deleteSaving)
 
 /*------------------what sets us part------------------*/
-adminRouter.get('/get-set', authentication, authorization(['admin']), getSetData)
-adminRouter.post('/set', authentication, authorization(['admin']), upload.fields([{ name: "image", maxCount: 1 }, { name: "smallImage", maxCount: 1 },]), addSetUsPart)
+adminRouter.get('/get-what-set-apart', authentication, authorization(['admin']), getSetData)
+adminRouter.post('/set-apart', authentication, authorization(['admin']), upload.fields([{ name: "image", maxCount: 1 }, { name: "smallImage", maxCount: 1 },]), addSetUsPart)
 
 /*------------------stragic strength------------------*/
 adminRouter.get('/get-stregic', authentication, authorization(['admin']), getStrength)
