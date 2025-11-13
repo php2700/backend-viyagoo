@@ -26,9 +26,9 @@ const quoteSchema = new mongoose.Schema({
         required: true
     },
     location: {
-        type: Date,
+        type: String,
         required: true,
-        enum: ['Aireport', 'Local', 'Outstation']
+        enum: ['Airport', 'Local', 'Outstation']
     }
 }, {
     timestamps: true

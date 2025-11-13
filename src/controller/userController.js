@@ -206,17 +206,37 @@ export const getTestimonials = async (req, res, next) => {
     }
 };
 
+// export const addQuote = async (req, res, next) => {
+//     try {
+//         { }
+//         const quote = new QuoteModel(req?.body);
+//         await quote.save();
+//         res.status(200).json({
+//             success: true,
+//             message: "quote data saved successfully",
+//             data: testimonials,
+//         });
+//     } catch (error) {
+//         next(error);
+//     }
+// }
 export const addQuote = async (req, res, next) => {
     try {
-        { }
-        const quote = new QuoteModel(req?.body);
+        // req.body से नया क्वोट बनाएं
+        const quote = new QuoteModel(req.body);
+
+        // उसे डेटाबेस में सेव करें
         await quote.save();
+
+        // जवाब में 'testimonials' की जगह 'quote' भेजें
         res.status(200).json({
             success: true,
-            message: "quote data saved successfully",
-            data: testimonials,
+            message: "Quote data saved successfully",
+            data: quote, // <-- यहाँ ठीक किया गया है
         });
+
     } catch (error) {
+        // कोई भी एरर आने पर उसे हैंडल करें
         next(error);
     }
-}
+};
