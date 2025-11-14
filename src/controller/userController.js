@@ -2,6 +2,7 @@ import AboutModel from "../model/aboutModel.js";
 import AdminModel from "../model/adminModel.js";
 import BannerModel from "../model/bannerModel.js";
 import BenefitModel from "../model/benefitModel.js";
+import ClientModel from "../model/clientModel.js";
 import QuoteModel from "../model/quoteModel.js";
 import SavingModel from "../model/savingModel.js";
 import SetModel from "../model/setModel.js";
@@ -140,26 +141,41 @@ export const getSaving = async (req, res, next) => {
 };
 
 /*--------- Get Set ---------*/
+// export const getSetData = async (req, res, next) => {
+//     try {
+//         const setData = await SetModel.findOne();
+
+//         if (!setData) {
+//             return res.status(404).json({
+//                 success: false,
+//                 message: "No set data found",
+//             });
+//         }
+
+//         res.status(200).json({
+//             success: true,
+//             message: "Set data fetched successfully",
+//             data: setData,
+//         });
+//     } catch (error) {
+//         next(error);
+//     }
+// };
 export const getSetData = async (req, res, next) => {
     try {
         const setData = await SetModel.findOne();
 
-        if (!setData) {
-            return res.status(404).json({
-                success: false,
-                message: "No set data found",
-            });
-        }
-
-        res.status(200).json({
+        return res.status(200).json({
             success: true,
-            message: "Set data fetched successfully",
-            data: setData,
+            message: setData ? "Set data fetched successfully" : "No set data found",
+            data: setData || null,
         });
+
     } catch (error) {
         next(error);
     }
 };
+
 
 /*--------- Get All Strategics ---------*/
 export const getStrength = async (req, res, next) => {
@@ -195,13 +211,16 @@ export const getClients = async (req, res, next) => {
 /*------------------ Get All Testimonials ------------------*/
 export const getTestimonials = async (req, res, next) => {
     try {
+        console.log("Attempting to fetch testimonials...");
         const testimonials = await TestImotionalModel.find().sort({ createdAt: -1 });
+        console.log("Testimonials found:", testimonials); 
         res.status(200).json({
             success: true,
             message: "Testimonials fetched successfully",
             data: testimonials,
         });
     } catch (error) {
+           console.error("!!! ERROR in getTestimonials:", error); 
         next(error);
     }
 };

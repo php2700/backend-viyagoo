@@ -417,25 +417,50 @@ export const deleteStrength = async (req, res, next) => {
 };
 
 
+// export const addClients = async (req, res, next) => {
+//     try {
+//         if (!req.file) {
+//             return res.status(400).json({ success: false, message: "Image is required" });
+//         }
+
+//         const imagePath = `/uploads/${req.file.filename}`;
+
+//         const client = await ClientModel.create({ image: imagePath });
+
+//         res.status(201).json({
+//             success: true,
+//             message: "Client added successfully",
+//             data: client,
+//         });
+//     } catch (error) {
+//         next(error);
+//     }
+// };
 export const addClients = async (req, res, next) => {
     try {
-        if (!req.file) {
-            return res.status(400).json({ success: false, message: "Image is required" });
+        if (!req.files || req.files.length === 0) {
+            return res.status(400).json({ success: false, message: "At least 1 image is required" });
         }
 
-        const imagePath = `/uploads/${req.file.filename}`;
+        let savedClients = [];
 
-        const client = await ClientModel.create({ image: imagePath });
+        req.files.forEach((file) => {
+            const imagePath = `/uploads/${file.filename}`;
+            savedClients.push({ image: imagePath });
+        });
+
+        const clients = await ClientModel.insertMany(savedClients);
 
         res.status(201).json({
             success: true,
-            message: "Client added successfully",
-            data: client,
+            message: "Clients added successfully",
+            data: clients,
         });
     } catch (error) {
         next(error);
     }
 };
+
 
 
 /*------------------Edit Client------------------*/

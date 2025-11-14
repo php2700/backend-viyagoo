@@ -44,7 +44,7 @@ adminRouter.delete("/delete-stregic/:id", authentication, authorization(['admin'
 
 /*------------------clients------------------*/
 adminRouter.get('/get-clients', authentication, authorization(['admin']), getClients)
-adminRouter.post('/client', authentication, authorization(['admin']), upload.single("image"), addClients)
+adminRouter.post('/client', authentication, authorization(['admin']),  upload.array("images", 5), addClients)
 adminRouter.patch('/edit-client', authentication, authorization(['admin']), editCleient)
 adminRouter.delete("/delete-client/:id", authentication, authorization(['admin']), upload.single("image"), deleteclient)
 
