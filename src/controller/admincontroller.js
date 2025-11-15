@@ -338,19 +338,44 @@ export const addSetUsPart = async (req, res, next) => {
 };
 
 
+// export const addStragicStrength = async (req, res, next) => {
+//     try {
+//         if (!req.file)
+//             return res.status(400).json({ success: false, message: "Image is required" });
+
+//         const imagePath = `/uploads/${req.file.filename}`;
+
+//         const strategic = await StrengthModel.create({ image: imagePath });
+
+//         res.status(201).json({
+//             success: true,
+//             message: "Strategic image added successfully",
+//             data: strategic,
+//         });
+//     } catch (error) {
+//         next(error);
+//     }
+// };
+
 export const addStragicStrength = async (req, res, next) => {
     try {
-        if (!req.file)
-            return res.status(400).json({ success: false, message: "Image is required" });
+        if (!req.files || req.files.length === 0) {
+            return res.status(400).json({
+                success: false,
+                message: "At least one image is required",
+            });
+        }
 
-        const imagePath = `/uploads/${req.file.filename}`;
+        const images = req.files.map((file) => `/uploads/${file.filename}`);
 
-        const strategic = await StrengthModel.create({ image: imagePath });
+        const inserted = await Promise.all(
+            images.map((image) => StrengthModel.create({ image }))
+        );
 
         res.status(201).json({
             success: true,
-            message: "Strategic image added successfully",
-            data: strategic,
+            message: "Images uploaded successfully",
+            data: inserted,
         });
     } catch (error) {
         next(error);
