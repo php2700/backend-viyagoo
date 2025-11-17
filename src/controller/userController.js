@@ -8,8 +8,10 @@ import SavingModel from "../model/savingModel.js";
 import SetModel from "../model/setModel.js";
 import StrengthModel from "../model/strengthModel.js";
 import TestImotionalModel from "../model/testimotionalModel.js";
+import Location from "../model/Location.js";
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
+
 
 const checkPassword = async (password, hashPassword) => {
   const verifyPassword = await bcrypt.compare(password, hashPassword);
@@ -258,4 +260,42 @@ export const addQuote = async (req, res, next) => {
         // कोई भी एरर आने पर उसे हैंडल करें
         next(error);
     }
+};
+
+// 
+
+// ========== Add Location ==========
+export const addLocation = async (req, res) => {
+  try {
+    const { name } = req.body;
+
+    if (!name)
+      return res.status(400).json({ message: "Location name required" });
+
+    const exists = await Location.findOne({ name });
+    if (exists) return res.status(400).json({ message: "Already exists" });
+
+    const newLoc = await Location.create({ name });
+
+    return res.status(201).json({
+      message: "Location added",
+      data: newLoc,
+    });
+  } catch (err) {
+    res.status(500).json({ message: "Server error", error: err.message });
+  }
+};
+
+// ========== Get All Locations ==========
+export const getLocations = async (req, res) => {
+  try {
+    const locations = await Location.find().sort({ name: 1 });
+
+    return res.status(200).json({
+      message: "Locations fetched successfully",
+      data: locations,
+    });
+  } catch (err) {
+    res.status(500).json({ message: "Server error", error: err.message });
+  }
 };

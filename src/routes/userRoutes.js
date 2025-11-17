@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { addQuote, getAbout, getBanner, getBenefit, getClients, getSaving, getSetData, getStrength, getTestimonials } from "../controller/userController.js";
+import { addQuote, getAbout, getBanner, getBenefit, getClients, getSaving, getSetData, getStrength, getTestimonials,addLocation,getLocations } from "../controller/userController.js";
 
 const userRouter = Router();
 
@@ -13,5 +13,9 @@ userRouter.get('/get-set', getSetData)
 userRouter.get('/get-stregic', getStrength)
 userRouter.get('/get-clients', getClients)
 userRouter.get('/get-testimonial', getTestimonials);
+userRouter.get("/add-location", addLocation);
+userRouter.get("/get-locations", getLocations);
+
+
 
 export default userRouter;

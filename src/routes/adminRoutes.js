@@ -38,7 +38,7 @@ adminRouter.post('/set-apart', authentication, authorization(['admin']), upload.
 
 /*------------------stragic strength------------------*/
 adminRouter.get('/get-stregic', authentication, authorization(['admin']), getStrength)
-adminRouter.post('/stregic', authentication, authorization(['admin']), upload.array("images", 10), addStragicStrength)
+adminRouter.post('/stregic', authentication, authorization(['admin']), upload.array("images", 5), addStragicStrength)
 adminRouter.patch('/edit-stregic', authentication, authorization(['admin']), editStrength)
 adminRouter.delete("/delete-stregic/:id", authentication, authorization(['admin']), upload.single("image"), deleteStrength)
 
