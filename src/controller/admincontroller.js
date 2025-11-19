@@ -8,6 +8,20 @@ import SetModel from "../model/setModel.js";
 import StrengthModel from "../model/strengthModel.js";
 import ClientModel from "../model/clientModel.js";
 import TestImotionalModel from "../model/testimotionalModel.js";
+import SegmentModel from "../model/segmentModel.js";
+import WhySegmentModel from "../model/whySegmentModel.js";
+import SegmentFleetModel from "../model/segmentFleetModel.js";
+import ChauferModel from "../model/chauferModel.js";
+import ChauferEdgeModel from "../model/chauferEdgeModel.js";
+import ChauferServiceModel from "../model/chauferServiceModel.js";
+import CorporateModel from "../model/corporateModel.js";
+import ChauferEdgeDetailModel from "../model/chauferEdgeDetailModel.js";
+import TransportationModel from "../model/transportationModel.js";
+import BusinessTransportationModel from "../model/businessTransportationModel.js";
+import FutureMobilityModel from "../model/futureMobilityModel.js";
+import FutureMobilityDetailModel from "../model/futureMobilityDetailModel.js";
+import BelieveModel from "../model/whyBelieveModel.js";
+import LogisticModel from "../model/logisticModel.js";
 
 export const addBanner = async (req, res, next) => {
     try {
@@ -623,5 +637,1123 @@ export const deleteTestimonial = async (req, res, next) => {
         });
     } catch (error) {
         next(error);
+    }
+};
+
+export const addEvSegment = async (req, res, next) => {
+    try {
+        const { about, evAdvantage, services } = req.body;
+
+        if (!about || !evAdvantage || !services) {
+            return res.status(400).json({
+                success: false,
+                message: "All fields are required",
+            });
+        }
+
+        let parsedServices = services;
+        const existing = await SegmentModel.findOne();
+        if (existing) {
+            existing.about = about;
+            existing.evAdvantage = evAdvantage;
+            existing.services = parsedServices;
+            await existing.save();
+
+            return res.status(200).json({
+                success: true,
+                message: "EV Segment updated successfully",
+                data: existing,
+            });
+        }
+
+        const newSegment = await SegmentModel.create({
+            about,
+            evAdvantage,
+            services: parsedServices,
+        });
+
+        return res.status(201).json({
+            success: true,
+            message: "EV Segment created successfully",
+            data: newSegment,
+        });
+
+    } catch (error) {
+        next(error);
+    }
+};
+
+
+export const addWhySegment = async (req, res, next) => {
+    try {
+        const { title, description } = req.body;
+
+        if (!title || !description || !req.file) {
+            return res.status(400).json({
+                success: false,
+                message: "Image, Title and Description are required",
+            });
+        }
+
+        const imagePath = `public/uploads/${req.file.filename}`;
+
+        const data = await WhySegmentModel.create({
+            title,
+            description,
+            image: imagePath,
+        });
+
+        return res.status(201).json({
+            success: true,
+            message: "Why EV Segment added successfully",
+            data,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+
+export const editWhySegment = async (req, res, next) => {
+    try {
+        const { title, description, _id } = req.body;
+
+        const existing = await WhySegmentModel.findById(_id);
+
+        if (!existing) {
+            return res.status(404).json({
+                success: false,
+                message: "Why EV Segment not found",
+            });
+        }
+
+        // Remove old image if new one is uploaded
+        if (req.file) {
+            if (existing.image && fs.existsSync(existing.image)) {
+                fs.unlinkSync(existing.image);
+            }
+            existing.image = `public/uploads/${req.file.filename}`;
+        }
+
+        if (title) existing.title = title;
+        if (description) existing.description = description;
+
+        await existing.save();
+
+        res.status(200).json({
+            success: true,
+            message: "Why EV Segment updated successfully",
+            data: existing,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+
+export const deleteWhySegment = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+
+        const existing = await WhySegmentModel.findById(id);
+
+        if (!existing) {
+            return res.status(404).json({
+                success: false,
+                message: "Why EV Segment not found",
+            });
+        }
+        if (existing.image && fs.existsSync(existing.image)) {
+            fs.unlinkSync(existing.image);
+        }
+
+        await existing.deleteOne();
+
+        res.status(200).json({
+            success: true,
+            message: "Why EV Segment deleted successfully",
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const addSegmentFleet = async (req, res, next) => {
+    try {
+        const { description } = req.body;
+
+        if (!description || !req.file) {
+            return res.status(400).json({
+                success: false,
+                message: "Image, Description are required",
+            });
+        }
+
+        const imagePath = `public/uploads/${req.file.filename}`;
+
+        const data = await SegmentFleetModel.create({
+            description,
+            image: imagePath,
+        });
+
+        return res.status(201).json({
+            success: true,
+            message: " EV Segment fleet added successfully",
+            data,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+
+export const editSegmentFleet = async (req, res, next) => {
+    try {
+        const { description, _id } = req.body;
+
+        const existing = await SegmentFleetModel.findById(_id);
+
+        if (!existing) {
+            return res.status(404).json({
+                success: false,
+                message: " EV Segment fleet not found",
+            });
+        }
+
+        // Remove old image if new one is uploaded
+        if (req.file) {
+            if (existing.image && fs.existsSync(existing.image)) {
+                fs.unlinkSync(existing.image);
+            }
+            existing.image = `public/uploads/${req.file.filename}`;
+        }
+
+        if (description) existing.description = description;
+
+        await existing.save();
+
+        res.status(200).json({
+            success: true,
+            message: "Segment fleet updated successfully",
+            data: existing,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+
+export const deleteSegmentFleet = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+
+        const existing = await SegmentFleetModel.findById(id);
+
+        if (!existing) {
+            return res.status(404).json({
+                success: false,
+                message: "Segment fleet not found",
+            });
+        }
+        if (existing.image && fs.existsSync(existing.image)) {
+            fs.unlinkSync(existing.image);
+        }
+
+        await existing.deleteOne();
+
+        res.status(200).json({
+            success: true,
+            message: "Segment fleet deleted successfully",
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const addLogistic = async (req, res, next) => {
+    try {
+        const {
+            description,
+            services,
+            ourProcessTitle,
+            whyViyagoo,
+        } = req.body;
+
+        const servicesArr = typeof services === "string" ? JSON.parse(services) : services;
+        const ourProcessTitleArr = typeof ourProcessTitle === "string" ? JSON.parse(ourProcessTitle) : ourProcessTitle;
+        const whyViyagooArr = typeof whyViyagoo === "string" ? JSON.parse(whyViyagoo) : whyViyagoo;
+
+        const whyViyagooImage = req.files?.whyViyagooImage?.[0]
+            ? `public/uploads/${req.files.whyViyagooImage[0].filename}`
+            : null;
+
+        const ourProcessImage = req.files?.ourProcessImage?.[0]
+            ? `public/uploads/${req.files.ourProcessImage[0].filename}`
+            : null;
+
+        let existing = await LogisticModel.findOne();
+
+        if (!existing) {
+            if (!whyViyagooImage || !ourProcessImage) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Both images are required for creating first entry",
+                });
+            }
+
+            const newLogistic = await LogisticModel.create({
+                description,
+                services: servicesArr,
+                ourProcessImage,
+                ourProcessTitle: ourProcessTitleArr,
+                whyViyagooImage,
+                whyViyagoo: whyViyagooArr,
+            });
+
+            return res.status(201).json({
+                success: true,
+                message: "Logistic created successfully",
+                data: newLogistic,
+            });
+        }
+
+        if (whyViyagooImage) {
+            if (existing.whyViyagooImage && fs.existsSync(existing.whyViyagooImage)) {
+                fs.unlinkSync(existing.whyViyagooImage);
+            }
+            existing.whyViyagooImage = whyViyagooImage;
+        }
+
+        if (ourProcessImage) {
+            if (existing.ourProcessImage && fs.existsSync(existing.ourProcessImage)) {
+                fs.unlinkSync(existing.ourProcessImage);
+            }
+            existing.ourProcessImage = ourProcessImage;
+        }
+        if (description) existing.description = description;
+        if (servicesArr) existing.services = servicesArr;
+        if (ourProcessTitleArr) existing.ourProcessTitle = ourProcessTitleArr;
+        if (whyViyagooArr) existing.whyViyagoo = whyViyagooArr;
+
+        await existing.save();
+
+        return res.status(200).json({
+            success: true,
+            message: "Logistic updated successfully",
+            data: existing,
+        });
+
+    } catch (error) {
+        next(error);
+    }
+};
+
+
+export const addChaufer = async (req, res, next) => {
+    try {
+        let { description, mobility } = req.body;
+
+
+        let existing = await ChauferModel.findOne();
+
+
+        if (!existing) {
+            const newData = await ChauferModel.create({
+                description,
+                mobility,
+            });
+
+            return res.status(201).json({
+                success: true,
+                message: "Chaufer details created successfully",
+                data: newData,
+            });
+        }
+
+        /* ---------------- UPDATE ---------------- */
+        if (description) existing.description = description;
+        if (mobility) existing.mobility = mobility;
+
+        await existing.save();
+
+        return res.status(200).json({
+            success: true,
+            message: "Chaufer details updated successfully",
+            data: existing,
+        });
+
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const addViyagooEdge = async (req, res, next) => {
+    try {
+        let { description } = req.body;
+
+
+        let existing = await ChauferEdgeModel.findOne();
+        if (!existing) {
+            const newData = await ChauferEdgeModel.create({
+                description,
+            });
+
+            return res.status(201).json({
+                success: true,
+                message: "Chaufer Edge details created successfully",
+                data: newData,
+            });
+        }
+
+        /* ---------------- UPDATE ---------------- */
+        if (description) existing.description = description;
+
+        await existing.save();
+
+        return res.status(200).json({
+            success: true,
+            message: "Chaufer Edge details updated successfully",
+            data: existing,
+        });
+
+    } catch (error) {
+        next(error);
+    }
+};
+
+
+export const addChauferService = async (req, res, next) => {
+    try {
+        const { title, points } = req.body;
+
+        if (!title || !points || !req.file) {
+            return res.status(400).json({ success: false, message: "All fields are required" });
+        }
+
+        const parsedPoints = typeof points === "string" ? JSON.parse(points) : points;
+
+        const data = await ChauferServiceModel.create({
+            title,
+            points: parsedPoints,
+            image: `public/uploads/${req.file.filename}`
+        });
+
+        res.status(201).json({
+            success: true,
+            message: "Chaufer service added successfully",
+            data
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+
+export const updateChauferService = async (req, res, next) => {
+    try {
+        const { title, points } = req.body;
+        const { id } = req.params;
+
+        const item = await ChauferServiceModel.findById(id);
+        if (!item) return res.status(404).json({ success: false, message: "Not found" });
+
+        // update fields
+        if (title) item.title = title;
+        if (points) item.points = JSON.parse(points);
+
+        // update image & Remove old one
+        if (req.file) {
+            const oldPath = item.image;
+            if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
+
+            item.image = `public/uploads/${req.file.filename}`;
+        }
+
+        await item.save();
+
+        res.status(200).json({
+            success: true,
+            message: "Chaufer service updated successfully",
+            data: item
+        });
+
+    } catch (error) {
+        next(error);
+    }
+};
+
+
+export const deleteChauferService = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+
+        const item = await ChauferServiceModel.findById(id);
+        if (!item) return res.status(404).json({ success: false, message: "Not found" });
+
+        // delete image
+        if (fs.existsSync(item.image)) fs.unlinkSync(item.image);
+
+        await item.deleteOne();
+
+        res.status(200).json({
+            success: true,
+            message: "Chaufer service deleted successfully",
+        });
+
+    } catch (error) {
+        next(error);
+    }
+};
+
+
+export const addCorporate = async (req, res) => {
+    try {
+        const { title, description } = req.body;
+        const image = req.file ? req.file.path : null;
+
+        if (!image) {
+            return res.status(400).json({ success: false, message: "Image required" });
+        }
+
+        const result = await CorporateModel.create({
+            title,
+            description,
+            image,
+        });
+
+        return res.status(201).json({
+            success: true,
+            message: "Corporate created",
+            data: result,
+        });
+
+    } catch (error) {
+        return res.status(500).json({ success: false, error: error.message });
+    }
+};
+
+export const updateCorporate = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { title, description } = req.body;
+        const newImage = req.file ? req.file.path : null;
+
+        const existing = await CorporateModel.findById(id);
+
+        if (!existing) {
+            return res.status(404).json({ success: false, message: "Not found" });
+        }
+
+        // remove old image if new image uploaded
+        if (newImage && existing.image) {
+            const oldPath = path.resolve(existing.image);
+            if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
+            existing.image = newImage;
+        }
+
+        existing.title = title ?? existing.title;
+        existing.description = description ?? existing.description;
+
+        await existing.save();
+
+        return res.status(200).json({
+            success: true,
+            message: "Corporate updated successfully",
+            data: existing,
+        });
+
+    } catch (error) {
+        return res.status(500).json({ success: false, error: error.message });
+    }
+};
+
+
+export const deleteCorporate = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const existing = await CorporateModel.findById(id);
+
+        if (!existing) {
+            return res.status(404).json({ success: false, message: "Not found" });
+        }
+
+        // delete image from folder
+        if (existing.image) {
+            const oldPath = path.resolve(existing.image);
+            if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
+        }
+
+        await existing.deleteOne();
+
+        return res.status(200).json({
+            success: true,
+            message: "Corporate deleted successfully",
+        });
+
+    } catch (error) {
+        return res.status(500).json({ success: false, error: error.message });
+    }
+};
+
+
+export const addViyagooEdgeDetail = async (req, res) => {
+    try {
+        const { description } = req.body;
+        const image = req.file ? req.file.path : null;
+
+        if (!image) {
+            return res.status(400).json({ success: false, message: "Image required" });
+        }
+
+        const result = await ChauferEdgeDetailModel.create({
+            description,
+            image,
+        });
+
+        return res.status(201).json({
+            success: true,
+            message: "Viyagoo Edge Detail created",
+            data: result,
+        });
+
+    } catch (error) {
+        return res.status(500).json({ success: false, error: error.message });
+    }
+};
+
+
+export const updateViyagooEdgeDetail = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { description } = req.body;
+        const newImage = req.file ? req.file.path : null;
+
+        const existing = await ChauferEdgeDetailModel.findById(id);
+
+        if (!existing) {
+            return res.status(404).json({ success: false, message: "Data not found" });
+        }
+
+        // Remove old image if new one uploaded
+        if (newImage && existing.image) {
+            const oldPath = path.resolve(existing.image);
+            if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
+            existing.image = newImage;
+        }
+
+        existing.description = description ?? existing.description;
+
+        await existing.save();
+
+        return res.status(200).json({
+            success: true,
+            message: "Viyagoo Edge Detail updated",
+            data: existing,
+        });
+
+    } catch (error) {
+        return res.status(500).json({ success: false, error: error.message });
+    }
+};
+
+export const deleteViyagooEdgeDetail = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const existing = await ChauferEdgeDetailModel.findById(id);
+
+        if (!existing) {
+            return res.status(404).json({ success: false, message: "Data not found" });
+        }
+
+        // delete image
+        if (existing.image) {
+            const oldPath = path.resolve(existing.image);
+            if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
+        }
+
+        await existing.deleteOne();
+
+        return res.status(200).json({
+            success: true,
+            message: "Viyagoo Edge Detail deleted successfully",
+        });
+
+    } catch (error) {
+        return res.status(500).json({ success: false, error: error.message });
+    }
+};
+
+
+export const upsertTransportation = async (req, res) => {
+    try {
+        const {
+            description,
+            growingChallenge,
+            title1,
+            description1,
+            title2,
+            description2,
+            title3,
+            description3,
+            title4,
+            description4
+        } = req.body;
+
+        const existing = await TransportationModel.findOne();
+
+        const files = req.files || {};
+
+        const getImage = (field) => (files[field] ? files[field][0].path : null);
+
+        const newImages = {
+            image1: getImage("image1"),
+            image2: getImage("image2"),
+            image3: getImage("image3"),
+            image4: getImage("image4"),
+        };
+        if (existing) {
+
+            for (let key of ["image1", "image2", "image3", "image4"]) {
+                if (newImages[key]) {
+                    const oldPath = existing[key];
+                    if (oldPath && fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
+                    existing[key] = newImages[key];
+                }
+            }
+
+            existing.description = JSON.parse(description);
+            existing.growingChallenge = JSON.parse(growingChallenge);
+
+            existing.title1 = title1;
+            existing.description1 = description1;
+            existing.title2 = title2;
+            existing.description2 = description2;
+            existing.title3 = title3;
+            existing.description3 = description3;
+            existing.title4 = title4;
+            existing.description4 = description4;
+
+            await existing.save();
+
+            return res.status(200).json({
+                success: true,
+                message: "Transportation updated successfully",
+                data: existing
+            });
+        }
+
+        const created = await TransportationModel.create({
+            description: JSON.parse(description),
+            growingChallenge: JSON.parse(growingChallenge),
+            title1,
+            description1,
+            title2,
+            description2,
+            title3,
+            description3,
+            title4,
+            description4,
+            ...newImages,
+        });
+
+        return res.status(201).json({
+            success: true,
+            message: "Transportation created successfully",
+            data: created
+        });
+
+    } catch (error) {
+        return res.status(500).json({ success: false, error: error.message });
+    }
+};
+
+export const addWhyTransportation = async (req, res) => {
+    try {
+        const { title, description } = req.body;
+
+        if (!req.file)
+            return res.status(400).json({ success: false, message: "Image is required" });
+
+        const newData = await WhytransportationModel.create({
+            image: req.file.path,
+            title,
+            description
+        });
+
+        return res.status(201).json({
+            success: true,
+            message: "Why Transportation added successfully",
+            data: newData
+        });
+
+    } catch (error) {
+        return res.status(500).json({ success: false, error: error.message });
+    }
+};
+
+export const updateWhyTransportation = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const existing = await WhytransportationModel.findById(id);
+        if (!existing)
+            return res.status(404).json({ success: false, message: "Record not found" });
+
+        // If image uploaded, delete old image
+        if (req.file) {
+            if (existing.image && fs.existsSync(existing.image)) {
+                fs.unlinkSync(existing.image);
+            }
+            existing.image = req.file.path;
+        }
+
+        // Update text fields
+        existing.title = req.body.title || existing.title;
+        existing.description = req.body.description || existing.description;
+
+        await existing.save();
+
+        return res.status(200).json({
+            success: true,
+            message: "Why Transportation updated successfully",
+            data: existing,
+        });
+
+    } catch (error) {
+        return res.status(500).json({ success: false, error: error.message });
+    }
+};
+
+
+export const deleteWhyTransportation = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const existing = await WhytransportationModel.findById(id);
+        if (!existing)
+            return res.status(404).json({ success: false, message: "Record not found" });
+
+        // Delete image from folder
+        if (existing.image && fs.existsSync(existing.image)) {
+            fs.unlinkSync(existing.image);
+        }
+
+        await WhytransportationModel.findByIdAndDelete(id);
+
+        return res.status(200).json({
+            success: true,
+            message: "Deleted successfully"
+        });
+
+    } catch (error) {
+        return res.status(500).json({ success: false, error: error.message });
+    }
+};
+
+
+export const addBusinessTransportation = async (req, res) => {
+    try {
+        const { title, description } = req.body;
+
+        if (!req.file)
+            return res.status(400).json({ success: false, message: "Image is required" });
+
+        const imagePath = "public/uploads/" + req.file.filename;
+
+        const saveData = await BusinessTransportationModel.create({
+            image: imagePath,
+            title,
+            description
+        });
+
+        return res.status(201).json({
+            success: true,
+            message: "Business Transportation added successfully",
+            data: saveData
+        });
+
+    } catch (error) {
+        return res.status(500).json({ success: false, error: error.message });
+    }
+};
+
+export const updateBusinessTransportation = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const existing = await BusinessTransportationModel.findById(id);
+        if (!existing)
+            return res.status(404).json({ success: false, message: "Record not found" });
+
+        // Delete old image only if a new image is uploaded
+        if (req.file) {
+            const oldImageFullPath = path.join(process.cwd(), existing.image);
+
+            if (fs.existsSync(oldImageFullPath)) {
+                fs.unlinkSync(oldImageFullPath);
+            }
+
+            existing.image = "public/uploads/" + req.file.filename;
+        }
+
+        existing.title = req.body.title || existing.title;
+        existing.description = req.body.description || existing.description;
+
+        await existing.save();
+
+        return res.status(200).json({
+            success: true,
+            message: "Business Transportation updated successfully",
+            data: existing
+        });
+
+    } catch (error) {
+        return res.status(500).json({ success: false, error: error.message });
+    }
+};
+
+
+export const deleteBusinessTransportation = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const existing = await BusinessTransportationModel.findById(id);
+        if (!existing)
+            return res.status(404).json({ success: false, message: "Record not found" });
+
+        const fullPath = path.join(process.cwd(), existing.image);
+
+        if (fs.existsSync(fullPath)) {
+            fs.unlinkSync(fullPath);
+        }
+
+        await BusinessTransportationModel.findByIdAndDelete(id);
+
+        return res.status(200).json({
+            success: true,
+            message: "Business Transportation deleted successfully"
+        });
+
+    } catch (error) {
+        return res.status(500).json({ success: false, error: error.message });
+    }
+};
+
+
+export const addFutureMobility = async (req, res) => {
+    try {
+        const { description } = req.body;
+
+        if (!description)
+            return res.status(400).json({ success: false, message: "Description is required" });
+
+        const existing = await FutureMobilityModel.findOne();
+
+        if (existing) {
+            // If new image uploaded → remove old image
+            if (req.file) {
+                const oldImagePath = path.join(process.cwd(), existing.image);
+
+                if (fs.existsSync(oldImagePath)) {
+                    fs.unlinkSync(oldImagePath);
+                }
+
+                existing.image = "public/uploads/" + req.file.filename;
+            }
+
+            existing.description = description;
+
+            await existing.save();
+
+            return res.status(200).json({
+                success: true,
+                message: "Future mobility updated successfully",
+                data: existing,
+            });
+        }
+
+        // ---------- CASE: CREATE ----------
+        if (!req.file)
+            return res.status(400).json({ success: false, message: "Image is required" });
+
+        const newData = await FutureMobilityModel.create({
+            description,
+            image: "public/uploads/" + req.file.filename,
+        });
+
+        return res.status(201).json({
+            success: true,
+            message: "Future mobility created successfully",
+            data: newData,
+        });
+
+    } catch (error) {
+        return res.status(500).json({ success: false, error: error.message });
+    }
+};
+
+
+export const addFututreDetail = async (req, res) => {
+    try {
+        const { title, description } = req.body;
+
+        if (!req.file)
+            return res.status(400).json({ success: false, message: "Image is required" });
+
+        const saveData = await FutureMobilityDetailModel.create({
+            title,
+            description,
+            image: "public/uploads/" + req.file.filename
+        });
+
+        return res.status(201).json({
+            success: true,
+            message: "Future mobility detail added successfully",
+            data: saveData
+        });
+
+    } catch (error) {
+        return res.status(500).json({ success: false, error: error.message });
+    }
+};
+
+export const updateFututreDetail = async (req, res) => {
+    try {
+        const { id } = req.body;
+
+        const existing = await FutureMobilityDetailModel.findById(id);
+        if (!existing)
+            return res.status(404).json({ success: false, message: "Record not found" });
+
+        // Remove old image if uploading new
+        if (req.file) {
+            const oldPath = path.join(process.cwd(), existing.image);
+            if (fs.existsSync(oldPath)) {
+                fs.unlinkSync(oldPath);
+            }
+            existing.image = "public/uploads/" + req.file.filename;
+        }
+
+        // Update fields
+        existing.title = req.body.title || existing.title;
+        existing.description = req.body.description || existing.description;
+
+        await existing.save();
+
+        return res.status(200).json({
+            success: true,
+            message: "Future mobility detail updated successfully",
+            data: existing
+        });
+
+    } catch (error) {
+        return res.status(500).json({ success: false, error: error.message });
+    }
+};
+
+
+export const deleteFututreDetail = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const existing = await FutureMobilityDetailModel.findById(id);
+        if (!existing)
+            return res.status(404).json({ success: false, message: "Record not found" });
+
+        // Remove image file
+        const oldPath = path.join(process.cwd(), existing.image);
+        if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
+
+        await FutureMobilityDetailModel.findByIdAndDelete(id);
+
+        return res.status(200).json({
+            success: true,
+            message: "Future mobility detail deleted successfully"
+        });
+
+    } catch (error) {
+        return res.status(500).json({ success: false, error: error.message });
+    }
+};
+
+export const addBelieveTransportation = async (req, res) => {
+    try {
+        const { services, closingDescription } = req.body;
+
+        if (!req.file)
+            return res.status(400).json({ success: false, message: "Image is required" });
+
+        const saveData = await BelieveModel.create({
+            image: "public/uploads/" + req.file.filename,
+            services: JSON.parse(services),
+            closingDescription
+        });
+
+        return res.status(201).json({
+            success: true,
+            message: "Believe transportation added successfully",
+            data: saveData
+        });
+
+    } catch (error) {
+        return res.status(500).json({ success: false, error: error.message });
+    }
+};
+
+export const updateBelieveTransportation = async (req, res) => {
+    try {
+        const { id, services, closingDescription } = req.body;
+
+        const existing = await BelieveModel.findById(id);
+        if (!existing)
+            return res.status(404).json({ success: false, message: "Record not found" });
+
+        if (req.file) {
+            const oldPath = path.join(process.cwd(), existing.image);
+            if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
+
+            existing.image = "public/uploads/" + req.file.filename;
+        }
+
+        if (services) existing.services = JSON.parse(services);
+        if (closingDescription) existing.closingDescription = closingDescription;
+
+        await existing.save();
+
+        return res.status(200).json({
+            success: true,
+            message: "Believe transportation updated successfully",
+            data: existing
+        });
+
+    } catch (error) {
+        return res.status(500).json({ success: false, error: error.message });
+    }
+};
+
+
+export const deleteBelieveTransportation = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const existing = await BelieveModel.findById(id);
+        if (!existing)
+            return res.status(404).json({ success: false, message: "Record not found" });
+
+        // Remove image file
+        const filePath = path.join(process.cwd(), existing.image);
+        if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
+
+        await BelieveModel.findByIdAndDelete(id);
+
+        return res.status(200).json({
+            success: true,
+            message: "Believe transportation deleted successfully"
+        });
+
+    } catch (error) {
+        return res.status(500).json({ success: false, error: error.message });
     }
 };

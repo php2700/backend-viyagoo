@@ -11,40 +11,55 @@ import TestImotionalModel from "../model/testimotionalModel.js";
 import Location from "../model/Location.js";
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
+import SegmentModel from "../model/segmentModel.js";
+import WhySegmentModel from "../model/whySegmentModel.js";
+import SegmentFleetModel from "../model/segmentFleetModel.js";
+import LogisticModel from "../model/logisticModel.js";
+import ChauferModel from "../model/chauferModel.js";
+import ChauferEdgeModel from "../model/chauferEdgeModel.js";
+import ChauferServiceModel from "../model/chauferServiceModel.js";
+import CorporateModel from "../model/corporateModel.js";
+import ChauferEdgeDetailModel from "../model/chauferEdgeDetailModel.js";
+import TransportationModel from "../model/transportationModel.js";
+import WhytransportationModel from "../model/whyTransPortationModel.js";
+import BusinessTransportationModel from "../model/businessTransportationModel.js";
+import FutureMobilityModel from "../model/futureMobilityModel.js";
+import FutureMobilityDetailModel from "../model/futureMobilityDetailModel.js";
+import BelieveModel from "../model/whyBelieveModel.js";
 
 
 const checkPassword = async (password, hashPassword) => {
-  const verifyPassword = await bcrypt.compare(password, hashPassword);
-  if (verifyPassword) return verifyPassword;
-  throw new Error('Email and Password wrong')
+    const verifyPassword = await bcrypt.compare(password, hashPassword);
+    if (verifyPassword) return verifyPassword;
+    throw new Error('Email and Password wrong')
 }
 
 const generateToken = async (userData) => {
-  const token = await jwt.sign({ id: userData?.id, role: userData?.role }, process.env.JWT_SECRET_KEY, { algorithm: process.env.JWT_ALGORITHM, expiresIn: process.env.JWT_EXPIRE_TIME });
-  if (token) return token;
-  throw new Error('something went wrong')
+    const token = await jwt.sign({ id: userData?.id, role: userData?.role }, process.env.JWT_SECRET_KEY, { algorithm: process.env.JWT_ALGORITHM, expiresIn: process.env.JWT_EXPIRE_TIME });
+    if (token) return token;
+    throw new Error('something went wrong')
 
 }
 
 export const Login = async (req, res, next) => {
-  try {
-    const { email, password } = req?.body;
+    try {
+        const { email, password } = req?.body;
 
-    const isExistEmail = await AdminModel.findOne({ email: email });
-    if (!isExistEmail) return res.status(404).json({ success: false, message: 'email not valid' })
+        const isExistEmail = await AdminModel.findOne({ email: email });
+        if (!isExistEmail) return res.status(404).json({ success: false, message: 'email not valid' })
 
-    await checkPassword(password, isExistEmail?.password);
-    const token = await generateToken(isExistEmail);
+        await checkPassword(password, isExistEmail?.password);
+        const token = await generateToken(isExistEmail);
 
-    const userData = {
-      _id: isExistEmail?._id,
-      role: isExistEmail?.role,
-      token: token
+        const userData = {
+            _id: isExistEmail?._id,
+            role: isExistEmail?.role,
+            token: token
+        }
+        return res.status(200).json({ message: 'login-successfully', data: userData })
+    } catch (error) {
+        next(error)
     }
-    return res.status(200).json({ message: 'login-successfully', data: userData })
-  } catch (error) {
-    next(error)
-  }
 }
 
 export const quotelist = async (req, res, next) => {
@@ -215,14 +230,14 @@ export const getTestimonials = async (req, res, next) => {
     try {
         console.log("Attempting to fetch testimonials...");
         const testimonials = await TestImotionalModel.find().sort({ createdAt: -1 });
-        console.log("Testimonials found:", testimonials); 
+        console.log("Testimonials found:", testimonials);
         res.status(200).json({
             success: true,
             message: "Testimonials fetched successfully",
             data: testimonials,
         });
     } catch (error) {
-           console.error("!!! ERROR in getTestimonials:", error); 
+        console.error("!!! ERROR in getTestimonials:", error);
         next(error);
     }
 };
@@ -266,36 +281,211 @@ export const addQuote = async (req, res, next) => {
 
 // ========== Add Location ==========
 export const addLocation = async (req, res) => {
-  try {
-    const { name } = req.body;
+    try {
+        const { name } = req.body;
 
-    if (!name)
-      return res.status(400).json({ message: "Location name required" });
+        if (!name)
+            return res.status(400).json({ message: "Location name required" });
 
-    const exists = await Location.findOne({ name });
-    if (exists) return res.status(400).json({ message: "Already exists" });
+        const exists = await Location.findOne({ name });
+        if (exists) return res.status(400).json({ message: "Already exists" });
 
-    const newLoc = await Location.create({ name });
+        const newLoc = await Location.create({ name });
 
-    return res.status(201).json({
-      message: "Location added",
-      data: newLoc,
-    });
-  } catch (err) {
-    res.status(500).json({ message: "Server error", error: err.message });
-  }
+        return res.status(201).json({
+            message: "Location added",
+            data: newLoc,
+        });
+    } catch (err) {
+        res.status(500).json({ message: "Server error", error: err.message });
+    }
 };
 
 // ========== Get All Locations ==========
 export const getLocations = async (req, res) => {
+    try {
+        const locations = await Location.find().sort({ name: 1 });
+
+        return res.status(200).json({
+            message: "Locations fetched successfully",
+            data: locations,
+        });
+    } catch (err) {
+        res.status(500).json({ message: "Server error", error: err.message });
+    }
+};
+
+
+export const getEvSegment = async (req, res, next) => {
+    try {
+        const segment = await SegmentModel.findOne();
+
+        return res.status(200).json({
+            success: true,
+            data: segment || {},
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+
+export const getWhySegment = async (req, res, next) => {
+    try {
+        const data = await WhySegmentModel.find();
+
+        return res.status(200).json({
+            success: true,
+            data,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+
+export const getSegmentFleet = async (req, res, next) => {
+    try {
+        const data = await SegmentFleetModel.find();
+
+        return res.status(200).json({
+            success: true,
+            data,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+
+export const getLogistic = async (req, res, next) => {
+    try {
+        const data = await LogisticModel.findOne();
+
+        return res.status(200).json({
+            success: true,
+            data,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+
+export const getChaufer = async (req, res, next) => {
+    try {
+        const data = await ChauferModel.findOne();
+        return res.status(200).json({
+            success: true,
+            data,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const getViyagooEdge = async (req, res, next) => {
+    try {
+        const data = await ChauferEdgeModel.findOne();
+        return res.status(200).json({
+            success: true,
+            data,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const getChauferService = async (req, res, next) => {
   try {
-    const locations = await Location.find().sort({ name: 1 });
+    const data = await ChauferServiceModel.find();
+    res.status(200).json({ success: true, data });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const getCorporate = async (req, res) => {
+  try {
+    const data = await CorporateModel.find();
+    return res.status(200).json({ success: true, data });
+  } catch (error) {
+    return res.status(500).json({ success: false, error: error.message });
+  }
+};
+
+export const getViyagooEdgeDetail = async (req, res) => {
+  try {
+    const data = await ChauferEdgeDetailModel.find();
+    return res.status(200).json({ success: true, data });
+  } catch (error) {
+    return res.status(500).json({ success: false, error: error.message });
+  }
+};
+
+export const getTransportation = async (req, res) => {
+  try {
+    const data = await TransportationModel.findOne(); 
+    return res.status(200).json({ success: true, data });
+  } catch (error) {
+    return res.status(500).json({ success: false, error: error.message });
+  }
+};
+
+export const getWhyTransportation = async (req, res) => {
+  try {
+    const data = await WhytransportationModel.find();
+    return res.status(200).json({ success: true, data });
+  } catch (error) {
+    return res.status(500).json({ success: false, error: error.message });
+  }
+};
+
+export const getBusinessTransportation = async (req, res) => {
+  try {
+    const data = await BusinessTransportationModel.find();
+    return res.status(200).json({ success: true, data });
+
+  } catch (error) {
+    return res.status(500).json({ success: false, error: error.message });
+  }
+};
+
+export const getFutureMobility = async (req, res) => {
+  try {
+    const data = await FutureMobilityModel.findOne();
 
     return res.status(200).json({
-      message: "Locations fetched successfully",
-      data: locations,
+      success: true,
+      data
     });
-  } catch (err) {
-    res.status(500).json({ message: "Server error", error: err.message });
+
+  } catch (error) {
+    return res.status(500).json({ success: false, error: error.message });
+  }
+};
+
+export const getFututreDetail = async (req, res) => {
+  try {
+    const data = await FutureMobilityDetailModel.find().sort({ createdAt: -1 });
+
+    return res.status(200).json({
+      success: true,
+      data
+    });
+
+  } catch (error) {
+    return res.status(500).json({ success: false, error: error.message });
+  }
+};
+
+export const getBelieveTransportation = async (req, res) => {
+  try {
+    const data = await BelieveModel.find().sort({ createdAt: -1 });
+
+    return res.status(200).json({ success: true, data });
+
+  } catch (error) {
+    return res.status(500).json({ success: false, error: error.message });
   }
 };
