@@ -22,6 +22,7 @@ import FutureMobilityModel from "../model/futureMobilityModel.js";
 import FutureMobilityDetailModel from "../model/futureMobilityDetailModel.js";
 import BelieveModel from "../model/whyBelieveModel.js";
 import LogisticModel from "../model/logisticModel.js";
+import WhytransportationModel from "../model/whyTransPortationModel.js";
 
 export const addBanner = async (req, res, next) => {
     try {
@@ -1051,10 +1052,9 @@ export const addChauferService = async (req, res, next) => {
 
 export const updateChauferService = async (req, res, next) => {
     try {
-        const { title, points } = req.body;
-        const { id } = req.params;
+        const { title, points, _id } = req.body;
 
-        const item = await ChauferServiceModel.findById(id);
+        const item = await ChauferServiceModel.findById(_id);
         if (!item) return res.status(404).json({ success: false, message: "Not found" });
 
         // update fields
@@ -1134,11 +1134,10 @@ export const addCorporate = async (req, res) => {
 
 export const updateCorporate = async (req, res) => {
     try {
-        const { id } = req.params;
-        const { title, description } = req.body;
+        const { title, description, _id } = req.body;
         const newImage = req.file ? req.file.path : null;
 
-        const existing = await CorporateModel.findById(id);
+        const existing = await CorporateModel.findById(_id);
 
         if (!existing) {
             return res.status(404).json({ success: false, message: "Not found" });
@@ -1225,11 +1224,10 @@ export const addViyagooEdgeDetail = async (req, res) => {
 
 export const updateViyagooEdgeDetail = async (req, res) => {
     try {
-        const { id } = req.params;
-        const { description } = req.body;
+        const { description, _id } = req.body;
         const newImage = req.file ? req.file.path : null;
 
-        const existing = await ChauferEdgeDetailModel.findById(id);
+        const existing = await ChauferEdgeDetailModel.findById(_id);
 
         if (!existing) {
             return res.status(404).json({ success: false, message: "Data not found" });
@@ -1302,10 +1300,10 @@ export const upsertTransportation = async (req, res) => {
         } = req.body;
 
         const existing = await TransportationModel.findOne();
-
         const files = req.files || {};
 
-        const getImage = (field) => (files[field] ? files[field][0].path : null);
+        const getImage = (field) =>
+            files[field] ? files[field][0].path : null;
 
         const newImages = {
             image1: getImage("image1"),
@@ -1313,12 +1311,16 @@ export const upsertTransportation = async (req, res) => {
             image3: getImage("image3"),
             image4: getImage("image4"),
         };
+
         if (existing) {
 
+            // replace images if new uploaded
             for (let key of ["image1", "image2", "image3", "image4"]) {
                 if (newImages[key]) {
                     const oldPath = existing[key];
-                    if (oldPath && fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
+                    if (oldPath && fs.existsSync(oldPath)) {
+                        fs.unlinkSync(oldPath);
+                    }
                     existing[key] = newImages[key];
                 }
             }
@@ -1344,6 +1346,7 @@ export const upsertTransportation = async (req, res) => {
             });
         }
 
+        // create new
         const created = await TransportationModel.create({
             description: JSON.parse(description),
             growingChallenge: JSON.parse(growingChallenge),
@@ -1395,13 +1398,12 @@ export const addWhyTransportation = async (req, res) => {
 
 export const updateWhyTransportation = async (req, res) => {
     try {
-        const { id } = req.params;
+        const { _id } = req.body
 
-        const existing = await WhytransportationModel.findById(id);
+        const existing = await WhytransportationModel.findById(_id);
         if (!existing)
             return res.status(404).json({ success: false, message: "Record not found" });
 
-        // If image uploaded, delete old image
         if (req.file) {
             if (existing.image && fs.existsSync(existing.image)) {
                 fs.unlinkSync(existing.image);
@@ -1409,7 +1411,6 @@ export const updateWhyTransportation = async (req, res) => {
             existing.image = req.file.path;
         }
 
-        // Update text fields
         existing.title = req.body.title || existing.title;
         existing.description = req.body.description || existing.description;
 
@@ -1435,7 +1436,6 @@ export const deleteWhyTransportation = async (req, res) => {
         if (!existing)
             return res.status(404).json({ success: false, message: "Record not found" });
 
-        // Delete image from folder
         if (existing.image && fs.existsSync(existing.image)) {
             fs.unlinkSync(existing.image);
         }
@@ -1481,13 +1481,12 @@ export const addBusinessTransportation = async (req, res) => {
 
 export const updateBusinessTransportation = async (req, res) => {
     try {
-        const { id } = req.params;
+        const { _id } = req.body;
 
-        const existing = await BusinessTransportationModel.findById(id);
+        const existing = await BusinessTransportationModel.findById(_id);
         if (!existing)
             return res.status(404).json({ success: false, message: "Record not found" });
 
-        // Delete old image only if a new image is uploaded
         if (req.file) {
             const oldImageFullPath = path.join(process.cwd(), existing.image);
 

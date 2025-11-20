@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { authentication } from "../middleware/authentication.js";
 import { authorization } from "../middleware/authorization.js";
-import { addAbout, addBanner, addBelieveTransportation, addBenefit, addBusinessTransportation, addChaufer, addChauferService, addClients, addCorporate, addEvSegment, addFutureMobility, addFututreDetail, addLogistic, addSaving, addSegmentFleet, addSetUsPart, addStragicStrength, addTestimonial, addViyagooEdge, addViyagooEdgeDetail, addWhySegment, addWhyTransportation, deleteBelieveTransportation, deleteBenefit, deleteBusinessTransportation, deleteChauferService, deleteclient, deleteCorporate, deleteFututreDetail, deleteSaving, deleteSegmentFleet, deleteStrength, deleteTestimonial, deleteViyagooEdgeDetail, deleteWhySegment, deleteWhyTransportation, editBenefit, editCleient, editSaving, editSegmentFleet, editStrength, editTestimonial, editWhySegment, updateBelieveTransportation, updateBusinessTransportation, updateChauferService, updateCorporate, updateFututreDetail, updateViyagooEdgeDetail, updateWhyTransportation } from "../controller/admincontroller.js";
+import { addAbout, addBanner, addBelieveTransportation, addBenefit, addBusinessTransportation, addChaufer, addChauferService, addClients, addCorporate, addEvSegment, addFutureMobility, addFututreDetail, addLogistic, addSaving, addSegmentFleet, addSetUsPart, addStragicStrength, addTestimonial, addViyagooEdge, addViyagooEdgeDetail, addWhySegment, addWhyTransportation, deleteBelieveTransportation, deleteBenefit, deleteBusinessTransportation, deleteChauferService, deleteclient, deleteCorporate, deleteFututreDetail, deleteSaving, deleteSegmentFleet, deleteStrength, deleteTestimonial, deleteViyagooEdgeDetail, deleteWhySegment, deleteWhyTransportation, editBenefit, editCleient, editSaving, editSegmentFleet, editStrength, editTestimonial, editWhySegment, updateBelieveTransportation, updateBusinessTransportation, updateChauferService, updateCorporate, updateFututreDetail, updateViyagooEdgeDetail, updateWhyTransportation, upsertTransportation } from "../controller/admincontroller.js";
 import upload from '../middleware/upload.js';
 import { getAbout, getBanner, getBelieveTransportation, getBenefit, getBusinessTransportation, getChaufer, getChauferService, getClients, getCorporate, getEvSegment, getFutureMobility, getFututreDetail, getLogistic, getSaving, getSegmentFleet, getSetData, getStrength, getTestimonials, getTransportation, getViyagooEdge, getViyagooEdgeDetail, getWhySegment, getWhyTransportation, Login, quotelist } from "../controller/userController.js";
 import uploadVideo from "../middleware/videoupload.js";
@@ -115,10 +115,10 @@ adminRouter.delete('/viyagoo-edge-detail/:id', authentication, authorization(['a
 /*=====================   transportation =========================  */
 
 /*------------------------transportation---------------*/
-adminRouter.get('/transportaion', authentication, authorization(['admin']), getTransportation)
-adminRouter.post('/transportaion', authentication, authorization(['admin']), upload.fields([
+adminRouter.get('/transportation', authentication, authorization(['admin']), getTransportation)
+adminRouter.post('/transportation', authentication, authorization(['admin']), upload.fields([
     { name: "image1", maxCount: 1 }, { name: "image2", maxCount: 1 }, { name: "image3", maxCount: 1 }, { name: "image4", maxCount: 1 },
-]), addViyagooEdge)
+]), upsertTransportation)
 
 /*------------------------why transportation---------------*/
 adminRouter.get('/why-transportation', authentication, authorization(['admin']), getWhyTransportation)
