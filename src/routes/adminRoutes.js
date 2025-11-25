@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { authentication } from "../middleware/authentication.js";
 import { authorization } from "../middleware/authorization.js";
-import { addAbout, addBanner, addBelieveTransportation, addBenefit, addBusinessTransportation, addChaufer, addChauferService, addClients, addCorporate, addEvSegment, addFutureMobility, addFututreDetail, addLogistic, addSaving, addSegmentFleet, addSetUsPart, addStragicStrength, addTestimonial, addViyagooEdge, addViyagooEdgeDetail, addWhySegment, addWhyTransportation, deleteBelieveTransportation, deleteBenefit, deleteBusinessTransportation, deleteChauferService, deleteclient, deleteCorporate, deleteFututreDetail, deleteSaving, deleteSegmentFleet, deleteStrength, deleteTestimonial, deleteViyagooEdgeDetail, deleteWhySegment, deleteWhyTransportation, editBenefit, editCleient, editSaving, editSegmentFleet, editStrength, editTestimonial, editWhySegment, updateBelieveTransportation, updateBusinessTransportation, updateChauferService, updateCorporate, updateFututreDetail, updateViyagooEdgeDetail, updateWhyTransportation, upsertTransportation } from "../controller/admincontroller.js";
+import { addAbout, addBanner, addBelieveTransportation, addBenefit, addBusinessTransportation, addChaufer, addChauferService, addClients, addCorporate, addEvSegment, addFutureMobility, addFututreDetail, addLogistic, addSaving, addSegmentFleet, addSetUsPart, addStragicStrength, addTestimonial, addViyagooEdge, addViyagooEdgeDetail, addWhySegment, addWhyTransportation, deleteBenefit, deleteBusinessTransportation, deleteChauferService, deleteclient, deleteCorporate, deleteFututreDetail, deleteSaving, deleteSegmentFleet, deleteStrength, deleteTestimonial, deleteViyagooEdgeDetail, deleteWhySegment, deleteWhyTransportation, editBenefit, editCleient, editSaving, editSegmentFleet, editStrength, editTestimonial, editWhySegment, updateBusinessTransportation, updateChauferService, updateCorporate, updateFututreDetail, updateViyagooEdgeDetail, updateWhyTransportation, upsertTransportation } from "../controller/admincontroller.js";
 import upload from '../middleware/upload.js';
 import { getAbout, getBanner, getBelieveTransportation, getBenefit, getBusinessTransportation, getChaufer, getChauferService, getClients, getCorporate, getEvSegment, getFutureMobility, getFututreDetail, getLogistic, getSaving, getSegmentFleet, getSetData, getStrength, getTestimonials, getTransportation, getViyagooEdge, getViyagooEdgeDetail, getWhySegment, getWhyTransportation, Login, quotelist } from "../controller/userController.js";
 import uploadVideo from "../middleware/videoupload.js";
@@ -39,7 +39,7 @@ adminRouter.post('/set-apart', authentication, authorization(['admin']), upload.
 /*------------------stragic strength------------------*/
 adminRouter.get('/get-stregic', authentication, authorization(['admin']), getStrength)
 adminRouter.post('/stregic', authentication, authorization(['admin']), upload.array("images", 5), addStragicStrength)
-adminRouter.patch('/edit-stregic', authentication, authorization(['admin']), editStrength)
+adminRouter.patch('/edit-stregic', authentication, authorization(['admin']),upload.array("image", 5), editStrength)
 adminRouter.delete("/delete-stregic/:id", authentication, authorization(['admin']), upload.single("image"), deleteStrength)
 
 /*------------------clients------------------*/
@@ -145,9 +145,6 @@ adminRouter.delete('/detail-future-mobility/:id', authentication, authorization(
 /*------------------------why believe transportation---------------*/
 adminRouter.get('/believe-transportation', authentication, authorization(['admin']), getBelieveTransportation)
 adminRouter.post('/believe-transportation', authentication, authorization(['admin']), addBelieveTransportation)
-adminRouter.patch('/believe-transportation', authentication, authorization(['admin']), updateBelieveTransportation)
-adminRouter.delete('/believe-transportation/:id', authentication, authorization(['admin']), deleteBelieveTransportation)
-
 /*======================****************services  ***** end***********************================================= */
 
 

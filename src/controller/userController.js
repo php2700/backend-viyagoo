@@ -397,95 +397,95 @@ export const getViyagooEdge = async (req, res, next) => {
 };
 
 export const getChauferService = async (req, res, next) => {
-  try {
-    const data = await ChauferServiceModel.find();
-    res.status(200).json({ success: true, data });
-  } catch (err) {
-    next(err);
-  }
+    try {
+        const data = await ChauferServiceModel.find();
+        res.status(200).json({ success: true, data });
+    } catch (err) {
+        next(err);
+    }
 };
 
 export const getCorporate = async (req, res) => {
-  try {
-    const data = await CorporateModel.find();
-    return res.status(200).json({ success: true, data });
-  } catch (error) {
-    return res.status(500).json({ success: false, error: error.message });
-  }
+    try {
+        const data = await CorporateModel.find();
+        return res.status(200).json({ success: true, data });
+    } catch (error) {
+        return res.status(500).json({ success: false, error: error.message });
+    }
 };
 
 export const getViyagooEdgeDetail = async (req, res) => {
-  try {
-    const data = await ChauferEdgeDetailModel.find();
-    return res.status(200).json({ success: true, data });
-  } catch (error) {
-    return res.status(500).json({ success: false, error: error.message });
-  }
+    try {
+        const data = await ChauferEdgeDetailModel.find();
+        return res.status(200).json({ success: true, data });
+    } catch (error) {
+        return res.status(500).json({ success: false, error: error.message });
+    }
 };
 
 export const getTransportation = async (req, res) => {
-  try {
-    const data = await TransportationModel.findOne(); 
-    return res.status(200).json({ success: true, data });
-  } catch (error) {
-    return res.status(500).json({ success: false, error: error.message });
-  }
+    try {
+        const data = await TransportationModel.findOne();
+        return res.status(200).json({ success: true, data });
+    } catch (error) {
+        return res.status(500).json({ success: false, error: error.message });
+    }
 };
 
 export const getWhyTransportation = async (req, res) => {
-  try {
-    const data = await WhytransportationModel.find();
-    return res.status(200).json({ success: true, data });
-  } catch (error) {
-    return res.status(500).json({ success: false, error: error.message });
-  }
+    try {
+        const data = await WhytransportationModel.find();
+        return res.status(200).json({ success: true, data });
+    } catch (error) {
+        return res.status(500).json({ success: false, error: error.message });
+    }
 };
 
 export const getBusinessTransportation = async (req, res) => {
-  try {
-    const data = await BusinessTransportationModel.find();
-    return res.status(200).json({ success: true, data });
+    try {
+        const data = await BusinessTransportationModel.find();
+        return res.status(200).json({ success: true, data });
 
-  } catch (error) {
-    return res.status(500).json({ success: false, error: error.message });
-  }
+    } catch (error) {
+        return res.status(500).json({ success: false, error: error.message });
+    }
 };
 
 export const getFutureMobility = async (req, res) => {
-  try {
-    const data = await FutureMobilityModel.findOne();
+    try {
+        const data = await FutureMobilityModel.findOne();
 
-    return res.status(200).json({
-      success: true,
-      data
-    });
+        return res.status(200).json({
+            success: true,
+            data
+        });
 
-  } catch (error) {
-    return res.status(500).json({ success: false, error: error.message });
-  }
+    } catch (error) {
+        return res.status(500).json({ success: false, error: error.message });
+    }
 };
 
 export const getFututreDetail = async (req, res) => {
-  try {
-    const data = await FutureMobilityDetailModel.find().sort({ createdAt: -1 });
+    try {
+        const data = await FutureMobilityDetailModel.find().sort({ createdAt: -1 });
 
-    return res.status(200).json({
-      success: true,
-      data
-    });
+        return res.status(200).json({
+            success: true,
+            data
+        });
 
-  } catch (error) {
-    return res.status(500).json({ success: false, error: error.message });
-  }
+    } catch (error) {
+        return res.status(500).json({ success: false, error: error.message });
+    }
 };
 
 export const getBelieveTransportation = async (req, res) => {
-  try {
-    const data = await BelieveModel.find().sort({ createdAt: -1 });
+    try {
+        const data = await BelieveModel.findOne();
 
-    return res.status(200).json({ success: true, data });
+        return res.status(200).json({ success: true, data });
 
-  } catch (error) {
-    return res.status(500).json({ success: false, error: error.message });
-  }
+    } catch (error) {
+        return res.status(500).json({ success: false, error: error.message });
+    }
 };

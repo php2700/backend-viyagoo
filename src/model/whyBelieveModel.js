@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const believeSchema = new mongoose.Schema({
-    image: {
+    description: {
         type: String,
         required: true
     },
@@ -27,6 +27,3 @@ const believeSchema = new mongoose.Schema({
 
 const BelieveModel = mongoose.model('believe', believeSchema)
 export default BelieveModel;
-
-
-

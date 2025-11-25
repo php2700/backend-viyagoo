@@ -381,7 +381,7 @@ export const addStragicStrength = async (req, res, next) => {
             });
         }
 
-        const images = req.files.map((file) => `/uploads/${file.filename}`);
+        const images = req.files.map((file) => `public/uploads/${file.filename}`);
 
         const inserted = await Promise.all(
             images.map((image) => StrengthModel.create({ image }))
@@ -410,7 +410,7 @@ export const editStrength = async (req, res, next) => {
 
         // Replace old image
         if (req.file) {
-            const newImage = `/uploads/${req.file.filename}`;
+            const newImage = `public/uploads/${req.file.filename}`;
             if (strategic.image) {
                 const oldPath = path.join("public", strategic.image);
                 if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
@@ -1620,13 +1620,12 @@ export const addFututreDetail = async (req, res) => {
 
 export const updateFututreDetail = async (req, res) => {
     try {
-        const { id } = req.body;
+        const { _id } = req.body;
 
-        const existing = await FutureMobilityDetailModel.findById(id);
+        const existing = await FutureMobilityDetailModel.findById(_id);
         if (!existing)
             return res.status(404).json({ success: false, message: "Record not found" });
 
-        // Remove old image if uploading new
         if (req.file) {
             const oldPath = path.join(process.cwd(), existing.image);
             if (fs.existsSync(oldPath)) {
@@ -1635,12 +1634,9 @@ export const updateFututreDetail = async (req, res) => {
             existing.image = "public/uploads/" + req.file.filename;
         }
 
-        // Update fields
         existing.title = req.body.title || existing.title;
         existing.description = req.body.description || existing.description;
-
         await existing.save();
-
         return res.status(200).json({
             success: true,
             message: "Future mobility detail updated successfully",
@@ -1679,80 +1675,40 @@ export const deleteFututreDetail = async (req, res) => {
 
 export const addBelieveTransportation = async (req, res) => {
     try {
-        const { services, closingDescription } = req.body;
+        const { services, closingDescription, description } = req.body;
+        const existing = await BelieveModel.findOne();
+        let saveData;
 
-        if (!req.file)
-            return res.status(400).json({ success: false, message: "Image is required" });
+        if (existing) {
+            existing.description = description;
+            existing.services = services;
+            existing.closingDescription = closingDescription;
 
-        const saveData = await BelieveModel.create({
-            image: "public/uploads/" + req.file.filename,
-            services: JSON.parse(services),
-            closingDescription
+            saveData = await existing.save();
+
+            return res.status(200).json({
+                success: true,
+                message: "Believe transportation updated successfully",
+                data: saveData,
+            });
+        }
+
+        saveData = await BelieveModel.create({
+            description,
+            services,
+            closingDescription,
         });
 
         return res.status(201).json({
             success: true,
             message: "Believe transportation added successfully",
-            data: saveData
+            data: saveData,
         });
 
     } catch (error) {
-        return res.status(500).json({ success: false, error: error.message });
-    }
-};
-
-export const updateBelieveTransportation = async (req, res) => {
-    try {
-        const { id, services, closingDescription } = req.body;
-
-        const existing = await BelieveModel.findById(id);
-        if (!existing)
-            return res.status(404).json({ success: false, message: "Record not found" });
-
-        if (req.file) {
-            const oldPath = path.join(process.cwd(), existing.image);
-            if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
-
-            existing.image = "public/uploads/" + req.file.filename;
-        }
-
-        if (services) existing.services = JSON.parse(services);
-        if (closingDescription) existing.closingDescription = closingDescription;
-
-        await existing.save();
-
-        return res.status(200).json({
-            success: true,
-            message: "Believe transportation updated successfully",
-            data: existing
+        return res.status(500).json({
+            success: false,
+            error: error.message,
         });
-
-    } catch (error) {
-        return res.status(500).json({ success: false, error: error.message });
-    }
-};
-
-
-export const deleteBelieveTransportation = async (req, res) => {
-    try {
-        const { id } = req.params;
-
-        const existing = await BelieveModel.findById(id);
-        if (!existing)
-            return res.status(404).json({ success: false, message: "Record not found" });
-
-        // Remove image file
-        const filePath = path.join(process.cwd(), existing.image);
-        if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
-
-        await BelieveModel.findByIdAndDelete(id);
-
-        return res.status(200).json({
-            success: true,
-            message: "Believe transportation deleted successfully"
-        });
-
-    } catch (error) {
-        return res.status(500).json({ success: false, error: error.message });
     }
 };
