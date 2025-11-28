@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { addQuote, getAbout, getBanner, getBenefit, getClients, getSaving, getSetData, getStrength, getTestimonials,addLocation,getLocations, getLogistic, getEvSegment, getWhySegment, getSegmentFleet, getChaufer, getChauferService, getCorporate, getViyagooEdge, getViyagooEdgeDetail } from "../controller/userController.js";
+import { addQuote, getAbout, getBanner, getBenefit, getClients, getSaving, getSetData, getStrength, getTestimonials,addLocation,getLocations, getLogistic, getEvSegment, getWhySegment, getSegmentFleet, getChaufer, getChauferService, getCorporate, getViyagooEdge, getViyagooEdgeDetail, getTransportation, getWhyTransportation, getBusinessTransportation, getFutureMobility, getFututreDetail, getBelieveTransportation } from "../controller/userController.js";
 
 const userRouter = Router();
 
@@ -31,6 +31,13 @@ userRouter.get('/chaufer-service', getChauferService)
 userRouter.get('/corporate', getCorporate)
 userRouter.get('/viyagoo-edge', getViyagooEdge)
 userRouter.get('/viyagoo-edge-detail', getViyagooEdgeDetail)
+
+userRouter.get('/transportation',  getTransportation)
+userRouter.get('/why-transportation',  getWhyTransportation)
+userRouter.get('/business-transportation',  getBusinessTransportation)
+userRouter.get('/future-mobility',  getFutureMobility)
+userRouter.get('/detail-future-mobility',  getFututreDetail)
+userRouter.get('/believe-transportation',  getBelieveTransportation)
 
 
 export default userRouter;
