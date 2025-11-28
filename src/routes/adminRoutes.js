@@ -1,9 +1,9 @@
 import { Router } from "express";
 import { authentication } from "../middleware/authentication.js";
 import { authorization } from "../middleware/authorization.js";
-import { addAbout, addBanner, addBelieveTransportation, addBenefit, addBusinessTransportation, addChaufer, addChauferService, addClients, addCorporate, addEvSegment, addFutureMobility, addFututreDetail, addLogistic, addSaving, addSegmentFleet, addSetUsPart, addStragicStrength, addTestimonial, addViyagooEdge, addViyagooEdgeDetail, addWhySegment, addWhyTransportation, deleteBenefit, deleteBusinessTransportation, deleteChauferService, deleteclient, deleteCorporate, deleteFututreDetail, deleteSaving, deleteSegmentFleet, deleteStrength, deleteTestimonial, deleteViyagooEdgeDetail, deleteWhySegment, deleteWhyTransportation, editBenefit, editCleient, editSaving, editSegmentFleet, editStrength, editTestimonial, editWhySegment, updateBusinessTransportation, updateChauferService, updateCorporate, updateFututreDetail, updateViyagooEdgeDetail, updateWhyTransportation, upsertTransportation } from "../controller/admincontroller.js";
+import { addAbout, addBanner, addBelieveTransportation, addBenefit, addBusinessTransportation, addChaufer, addChauferService, addClients, addCorporate, addEvSegment, addFutureMobility, addFututreDetail, addLogistic, addSaving, addSegmentFleet, addSetUsPart, addStragicStrength, addTestimonial, addViyagooEdge, addViyagooEdgeDetail, addWhySegment, addWhyTransportation, deleteBenefit, deleteBusinessTransportation, deleteChauferService, deleteclient, deleteCorporate, deleteFututreDetail, deleteSaving, deleteSegmentFleet, deleteStrength, deleteTestimonial, deleteViyagooEdgeDetail, deleteWhySegment, deleteWhyTransportation, editBenefit, editCleient, editSaving, editSegmentFleet, editStrength, editTestimonial, editWhySegment, updateBusinessTransportation, updateChauferService, updateCorporate, updateFututreDetail, updateViyagooEdgeDetail, updateWhyTransportation, upsertTransportation ,driverinquiries,driverpagecontent,updatedriverpage,getAboutData,updateAboutData} from "../controller/admincontroller.js";
 import upload from '../middleware/upload.js';
-import { getAbout, getBanner, getBelieveTransportation, getBenefit, getBusinessTransportation, getChaufer, getChauferService, getClients, getCorporate, getEvSegment, getFutureMobility, getFututreDetail, getLogistic, getSaving, getSegmentFleet, getSetData, getStrength, getTestimonials, getTransportation, getViyagooEdge, getViyagooEdgeDetail, getWhySegment, getWhyTransportation, Login, quotelist } from "../controller/userController.js";
+import { getAbout, getBanner, getBelieveTransportation, getBenefit, getBusinessTransportation, getChaufer, getChauferService, getClients, getCorporate, getEvSegment, getFutureMobility, getFututreDetail, getLogistic, getSaving, getSegmentFleet, getSetData, getStrength, getTestimonials, getTransportation, getViyagooEdge, getViyagooEdgeDetail, getWhySegment, getWhyTransportation, Login, quotelist, } from "../controller/userController.js";
 import uploadVideo from "../middleware/videoupload.js";
 
 const adminRouter = Router();
@@ -146,6 +146,14 @@ adminRouter.delete('/detail-future-mobility/:id', authentication, authorization(
 adminRouter.get('/believe-transportation', authentication, authorization(['admin']), getBelieveTransportation)
 adminRouter.post('/believe-transportation', authentication, authorization(['admin']), addBelieveTransportation)
 /*======================****************services  ***** end***********************================================= */
+adminRouter.get("/driver-inquiries", authentication, authorization(["admin"]),driverinquiries)
+adminRouter.get("/driver-page-content", authentication, authorization(["admin"]),driverpagecontent)
+adminRouter.post("/driver-page-content", authentication, authorization(["admin"]), upload.single("image"),updatedriverpage)
+
+
+
+adminRouter.get('/aboutUS', authentication, authorization(['admin']), getAboutData )
+adminRouter.post('/aboutUS', authentication, authorization(['admin']), updateAboutData)
 
 
 export default adminRouter

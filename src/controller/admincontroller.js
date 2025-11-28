@@ -23,6 +23,10 @@ import FutureMobilityDetailModel from "../model/futureMobilityDetailModel.js";
 import BelieveModel from "../model/whyBelieveModel.js";
 import LogisticModel from "../model/logisticModel.js";
 import WhytransportationModel from "../model/whyTransPortationModel.js";
+// ✅ YEH SAHI HAI (Curly Braces lagayein):
+import { DriverInquiry, DriverPage } from "../model/DriverModel.js";
+import { AboutUSModel } from "../model/AboutUSModel.js";
+
 
 export const addBanner = async (req, res, next) => {
     try {
@@ -1711,4 +1715,67 @@ export const addBelieveTransportation = async (req, res) => {
             error: error.message,
         });
     }
+};
+export const driverinquiries = async (req, res) => {
+     try {
+    const inquiries = await DriverInquiry.find().sort({ createdAt: -1 });
+    res.json({ success: true, data: inquiries });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+
+
+
+}
+export const driverpagecontent = async (req, res) => {
+     try {
+    const content = await DriverPage.findOne();
+    res.json({ success: true, data: content || {} });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+
+}
+export const updatedriverpage = async (req, res) => {
+    try {
+    const { topTitle, topDescription, bottomTitle, bottomDescription } = req.body;
+    let updateData = { topTitle, topDescription, bottomTitle, bottomDescription };
+
+    // Agar nayi image upload hui hai
+    if (req.file) {
+      updateData.bottomImage = req.file.path; // Cloudinary use kar rahe ho to uska URL
+    }
+
+    const updatedContent = await DriverPage.findOneAndUpdate(
+      {}, updateData, { new: true, upsert: true }
+    );
+    res.json({ success: true, message: "Page content updated!", data: updatedContent });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+
+
+}
+export const getAboutData = async (req, res) => {
+  try {
+    let aboutData = await AboutUSModel.findOne();
+    if (!aboutData) {
+      return res.status(200).json({ success: true, data: {} });
+    }
+    res.status(200).json({ success: true, data: aboutData });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+export const updateAboutData = async (req, res) => {
+  try {
+    const updatedAbout = await AboutUSModel.findOneAndUpdate(
+      {}, 
+      req.body, 
+      { new: true, upsert: true }
+    );
+    res.status(200).json({ success: true, message: "Updated successfully!", data: updatedAbout });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
 };
