@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { addQuote, getAbout, getBanner, getBenefit, getClients, getSaving, getSetData, getStrength, getTestimonials,addLocation,getLocations, getLogistic, getEvSegment, getWhySegment, getSegmentFleet, getChaufer, getChauferService, getCorporate, getViyagooEdge, getViyagooEdgeDetail, getTransportation, getWhyTransportation, getBusinessTransportation, getFutureMobility, getFututreDetail, getBelieveTransportation } from "../controller/userController.js";
+import { addQuote, getAbout, getBanner, getBenefit, getClients, getSaving, getSetData, getStrength,getAboutData, getTestimonials,addLocation,getLocations, getLogistic, getEvSegment, getWhySegment, getSegmentFleet, getChaufer, getChauferService, getCorporate, getViyagooEdge, getViyagooEdgeDetail, getTransportation, getWhyTransportation, getBusinessTransportation, getFutureMobility, getFututreDetail, getBelieveTransportation,driverpagecontent,submitdriverform } from "../controller/userController.js";
 
 const userRouter = Router();
 
@@ -38,6 +38,11 @@ userRouter.get('/business-transportation',  getBusinessTransportation)
 userRouter.get('/future-mobility',  getFutureMobility)
 userRouter.get('/detail-future-mobility',  getFututreDetail)
 userRouter.get('/believe-transportation',  getBelieveTransportation)
+
+userRouter.get("/driver-page-content",driverpagecontent)
+userRouter.post("/submit-driver-form",submitdriverform)
+userRouter.get('/aboutUS', getAboutData )
+
 
 
 export default userRouter;

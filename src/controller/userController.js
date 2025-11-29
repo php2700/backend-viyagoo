@@ -26,6 +26,11 @@ import BusinessTransportationModel from "../model/businessTransportationModel.js
 import FutureMobilityModel from "../model/futureMobilityModel.js";
 import FutureMobilityDetailModel from "../model/futureMobilityDetailModel.js";
 import BelieveModel from "../model/whyBelieveModel.js";
+// import DriverPage from "../model/DriverModel.js";
+// import DriverInquiry from "../model/DriverModel.js";
+import { DriverPage, DriverInquiry } from "../model/DriverModel.js";
+import { AboutUSModel } from "../model/AboutUSModel.js";
+
 
 
 const checkPassword = async (password, hashPassword) => {
@@ -488,4 +493,35 @@ export const getBelieveTransportation = async (req, res) => {
     } catch (error) {
         return res.status(500).json({ success: false, error: error.message });
     }
+};
+export const driverpagecontent = async (req, res) => {
+     try {
+    const content = await DriverPage.findOne();
+    res.json({ success: true, data: content || {} });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+
+}
+export const submitdriverform = async (req, res) => {
+      try {
+    const newData = new DriverInquiry(req.body);
+    await newData.save();
+    res.status(200).json({ success: true, message: "Form submitted successfully!" });
+  } catch (err) {
+    console.error("Form Submit Error:", err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+
+}
+export const getAboutData = async (req, res) => {
+  try {
+    let aboutData = await AboutUSModel.findOne();
+    if (!aboutData) {
+      return res.status(200).json({ success: true, data: {} });
+    }
+    res.status(200).json({ success: true, data: aboutData });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
 };
