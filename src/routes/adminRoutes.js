@@ -153,7 +153,10 @@ adminRouter.post("/driver-page-content", authentication, authorization(["admin"]
 
 
 adminRouter.get('/aboutUS', authentication, authorization(['admin']), getAboutData )
-adminRouter.post('/aboutUS', authentication, authorization(['admin']), updateAboutData)
+adminRouter.post('/aboutUS', authentication, authorization(['admin']),upload.fields([
+    { name: "whatSetImage", maxCount: 1 }, { name: "vehicleIcon", maxCount: 1 }, { name: "safetyIcon", maxCount: 1 }, { name: "tripIcon", maxCount: 1 },
+     { name: "tripDailyIcon", maxCount: 1 }
+]), updateAboutData)
 
 
 export default adminRouter

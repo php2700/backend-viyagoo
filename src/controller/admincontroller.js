@@ -1767,15 +1767,70 @@ export const getAboutData = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
 export const updateAboutData = async (req, res) => {
   try {
-    const updatedAbout = await AboutUSModel.findOneAndUpdate(
-      {}, 
-      req.body, 
-      { new: true, upsert: true }
-    );
-    res.status(200).json({ success: true, message: "Updated successfully!", data: updatedAbout });
+    // find existing document
+    let about = await AboutUSModel.findOne();
+
+    // If not exists → create new
+    if (!about) {
+      about = new AboutUSModel();
+    }
+
+    // helper to replace image and delete old one
+    const handleImageUpdate = (fieldName) => {
+      if (req.files && req.files[fieldName]?.[0]) {
+        const oldPath = about[fieldName];
+
+        // delete old image if exists
+        if (oldPath) {
+          const fullOldPath = path.join(process.cwd(), oldPath);
+          if (fs.existsSync(fullOldPath)) {
+            fs.unlinkSync(fullOldPath);
+          }
+        }
+
+        // set new image
+        about[fieldName] = "public/uploads/" + req.files[fieldName][0].filename;
+      }
+    };
+
+    // Handle images
+    handleImageUpdate("whatSetImage");
+    handleImageUpdate("vehicleIcon");
+    handleImageUpdate("safetyIcon");
+    handleImageUpdate("tripIcon");
+    handleImageUpdate("tripDailyIcon");
+
+    // Handle text fields
+    about.description = req.body.description ?? about.description;
+    about.subDescription = req.body.subDescription ?? about.subDescription;
+    about.visionTitle = req.body.visionTitle ?? about.visionTitle;
+    about.visionDesc = req.body.visionDesc ?? about.visionDesc;
+    about.missionTitle = req.body.missionTitle ?? about.missionTitle;
+    about.missionDesc = req.body.missionDesc ?? about.missionDesc;
+    about.whatSetDescription = req.body.whatSetDescription ?? about.whatSetDescription;
+
+    about.vehicles = req.body.vehicles ?? about.vehicles;
+    about.sefety = req.body.sefety ?? about.sefety;
+    about.trips = req.body.trips ?? about.trips;
+    about.dailyTrip = req.body.dailyTrip ?? about.dailyTrip;
+
+    // Save document
+    await about.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "About section updated successfully",
+      data: about
+    });
+
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    return res.status(500).json({
+      success: false,
+      message: error.message
+    });
   }
 };
+
