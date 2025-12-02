@@ -1,9 +1,9 @@
 import { Router } from "express";
 import { authentication } from "../middleware/authentication.js";
 import { authorization } from "../middleware/authorization.js";
-import { addAbout, addBanner, addBelieveTransportation, addBenefit, addBusinessTransportation, addChaufer, addChauferService, addClients, addCorporate, addEvSegment, addFutureMobility, addFututreDetail, addLogistic, addSaving, addSegmentFleet, addSetUsPart, addStragicStrength, addTestimonial, addViyagooEdge, addViyagooEdgeDetail, addWhySegment, addWhyTransportation, deleteBenefit, deleteBusinessTransportation, deleteChauferService, deleteclient, deleteCorporate, deleteFututreDetail, deleteSaving, deleteSegmentFleet, deleteStrength, deleteTestimonial, deleteViyagooEdgeDetail, deleteWhySegment, deleteWhyTransportation, editBenefit, editCleient, editSaving, editSegmentFleet, editStrength, editTestimonial, editWhySegment, updateBusinessTransportation, updateChauferService, updateCorporate, updateFututreDetail, updateViyagooEdgeDetail, updateWhyTransportation, upsertTransportation ,driverinquiries,driverpagecontent,updatedriverpage,getAboutData,updateAboutData} from "../controller/admincontroller.js";
+import { addAbout, addBanner, addBelieveTransportation, addBenefit, addBusinessTransportation, addChaufer, addChauferService, addClients, addCorporate, addEvSegment, addFutureMobility, addFututreDetail, addLogistic, addSaving, addSegmentFleet, addSetUsPart, addStragicStrength, addTestimonial, addViyagooEdge, addViyagooEdgeDetail, addWhySegment, addWhyTransportation, deleteBenefit, deleteBusinessTransportation, deleteChauferService, deleteclient, deleteCorporate, deleteFututreDetail, deleteSaving, deleteSegmentFleet, deleteStrength, deleteTestimonial, deleteViyagooEdgeDetail, deleteWhySegment, deleteWhyTransportation, editBenefit, editCleient, editSaving, editSegmentFleet, editStrength, editTestimonial, editWhySegment, updateBusinessTransportation, updateChauferService, updateCorporate, updateFututreDetail, updateViyagooEdgeDetail, updateWhyTransportation, upsertTransportation ,driverinquiries,driverpagecontent,updatedriverpage,getAboutData,updateAboutData, editSecurity, addSecurity, deleteSecurity, addaboutBanner, addviyagooBanner, addServiceBanner, addHomeBgBanner} from "../controller/admincontroller.js";
 import upload from '../middleware/upload.js';
-import { getAbout, getBanner, getBelieveTransportation, getBenefit, getBusinessTransportation, getChaufer, getChauferService, getClients, getCorporate, getEvSegment, getFutureMobility, getFututreDetail, getLogistic, getSaving, getSegmentFleet, getSetData, getStrength, getTestimonials, getTransportation, getViyagooEdge, getViyagooEdgeDetail, getWhySegment, getWhyTransportation, Login, quotelist, } from "../controller/userController.js";
+import { getAbout, getaboutBanner, getBanner, getBelieveTransportation, getBenefit, getBusinessTransportation, getChaufer, getChauferService, getClients, getCorporate, getEvSegment, getFutureMobility, getFututreDetail, getHomeBgBanner, getLogistic, getSaving, getSecurity, getSegmentFleet, getServiceBanner, getSetData, getStrength, getTestimonials, getTransportation, getViyagooBanner, getViyagooEdge, getViyagooEdgeDetail, getWhySegment, getWhyTransportation, Login, quotelist, } from "../controller/userController.js";
 import uploadVideo from "../middleware/videoupload.js";
 
 const adminRouter = Router();
@@ -21,6 +21,9 @@ adminRouter.get('/about', authentication, authorization(['admin']), getAbout)
 adminRouter.post('/about', authentication, authorization(['admin']), upload.single("image"), addAbout)
 
 /*------------------Benefit APIs------------------*/
+adminRouter.get('/home-bg-banner', authentication, authorization(['admin']), getHomeBgBanner)
+adminRouter.post('/home-bg-banner', authentication, authorization(['admin']), upload.single("banner"), addHomeBgBanner)
+
 adminRouter.get('/get-benefit', authentication, authorization(['admin']), getBenefit);
 adminRouter.post('/benefit', authentication, authorization(['admin']), upload.single("image"), addBenefit);
 adminRouter.patch('/edit-benefit', authentication, authorization(['admin']), upload.single("image"), editBenefit);
@@ -31,6 +34,12 @@ adminRouter.get('/get-saving', authentication, authorization(['admin']), getSavi
 adminRouter.patch('/saving', authentication, authorization(['admin']), upload.single("image"), editSaving)
 adminRouter.post('/saving', authentication, authorization(['admin']), upload.single("image"), addSaving)
 adminRouter.delete("/delete-saving/:id", authentication, authorization(['admin']), deleteSaving)
+
+/*------------------security------------------*/
+adminRouter.get('/get-security', authentication, authorization(['admin']), getSecurity)
+adminRouter.patch('/security', authentication, authorization(['admin']), upload.single("image"), editSecurity)
+adminRouter.post('/security', authentication, authorization(['admin']), upload.single("image"), addSecurity)
+adminRouter.delete("/delete-security/:id", authentication, authorization(['admin']), deleteSecurity)
 
 /*------------------what sets us part------------------*/
 adminRouter.get('/get-what-set-apart', authentication, authorization(['admin']), getSetData)
@@ -57,7 +66,9 @@ adminRouter.delete('/delete-testimonial/:id', authentication, authorization(['ad
 
 
 /*======================************services***** start*************================================= */
-
+/*------------------service banner------------------*/
+adminRouter.get('/get-service-banner', authentication, authorization(['admin']), getServiceBanner)
+adminRouter.post('/service-banner', authentication, authorization(['admin']), upload.single("banner"), addServiceBanner)
 
 /*=====================   ev segment =========================  */
 
@@ -146,12 +157,21 @@ adminRouter.delete('/detail-future-mobility/:id', authentication, authorization(
 adminRouter.get('/believe-transportation', authentication, authorization(['admin']), getBelieveTransportation)
 adminRouter.post('/believe-transportation', authentication, authorization(['admin']), addBelieveTransportation)
 /*======================****************services  ***** end***********************================================= */
+
+
+
+
+adminRouter.get('/get-viyagoo-banner', authentication, authorization(['admin']), getViyagooBanner)
+adminRouter.post('/viyagoo-banner', authentication, authorization(['admin']), upload.single("banner"), addviyagooBanner)
 adminRouter.get("/driver-inquiries", authentication, authorization(["admin"]),driverinquiries)
 adminRouter.get("/driver-page-content", authentication, authorization(["admin"]),driverpagecontent)
 adminRouter.post("/driver-page-content", authentication, authorization(["admin"]), upload.single("image"),updatedriverpage)
 
 
 
+/*------------------banner------------------*/
+adminRouter.get('/get-about-banner', authentication, authorization(['admin']), getaboutBanner)
+adminRouter.post('/about-banner', authentication, authorization(['admin']), upload.single("banner"), addaboutBanner)
 adminRouter.get('/aboutUS', authentication, authorization(['admin']), getAboutData )
 adminRouter.post('/aboutUS', authentication, authorization(['admin']),upload.fields([
     { name: "whatSetImage", maxCount: 1 }, { name: "vehicleIcon", maxCount: 1 }, { name: "safetyIcon", maxCount: 1 }, { name: "tripIcon", maxCount: 1 },

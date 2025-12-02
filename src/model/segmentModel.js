@@ -31,3 +31,15 @@ export default SegmentModel;
 
 
 
+const serviceBannerSchema = new mongoose.Schema({
+    banner: {
+        type: String,
+        required: true
+    },
+  
+
+}, {
+    timestamps: true
+})
+
+export  const ServiceBannerModel = mongoose.model('serviceBanner', serviceBannerSchema)

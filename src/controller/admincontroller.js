@@ -2,13 +2,13 @@ import BannerModel from "../model/bannerModel.js";
 import fs from "fs";
 import path from "path";
 import AboutModel from "../model/aboutModel.js";
-import BenefitModel from "../model/benefitModel.js";
-import SavingModel from "../model/savingModel.js";
+import BenefitModel, { ServiceBgBannerModel } from "../model/benefitModel.js";
+import SavingModel, { SecurityModel } from "../model/savingModel.js";
 import SetModel from "../model/setModel.js";
 import StrengthModel from "../model/strengthModel.js";
 import ClientModel from "../model/clientModel.js";
 import TestImotionalModel from "../model/testimotionalModel.js";
-import SegmentModel from "../model/segmentModel.js";
+import SegmentModel, { ServiceBannerModel } from "../model/segmentModel.js";
 import WhySegmentModel from "../model/whySegmentModel.js";
 import SegmentFleetModel from "../model/segmentFleetModel.js";
 import ChauferModel from "../model/chauferModel.js";
@@ -24,8 +24,8 @@ import BelieveModel from "../model/whyBelieveModel.js";
 import LogisticModel from "../model/logisticModel.js";
 import WhytransportationModel from "../model/whyTransPortationModel.js";
 // ✅ YEH SAHI HAI (Curly Braces lagayein):
-import { DriverInquiry, DriverPage } from "../model/DriverModel.js";
-import { AboutUSModel } from "../model/AboutUSModel.js";
+import ViyagooBannerModel, { DriverInquiry, DriverPage } from "../model/DriverModel.js";
+import AboutBannerModel, { AboutUSModel } from "../model/AboutUSModel.js";
 
 
 export const addBanner = async (req, res, next) => {
@@ -290,6 +290,91 @@ export const deleteSaving = async (req, res, next) => {
         }
 
         await SavingModel.findByIdAndDelete(id);
+
+        res.status(200).json({
+            success: true,
+            message: "Saving deleted successfully",
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+
+export const addSecurity= async (req, res, next) => {
+    try {
+        const { title, description } = req.body;
+
+        if (!title || !description)
+            return res.status(400).json({ success: false, message: "all Field is required" });
+        if (!req?.file) return res.status(400).json({ success: false, message: "all field is required" });
+
+        const imagePath = req.file ? `public/uploads/${req.file.filename}` : null;
+
+        const saving = await SecurityModel.create({
+            title,
+            description,
+            image: imagePath,
+        });
+
+        res.status(201).json({
+            success: true,
+            message: "Saving added successfully",
+            data: saving,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+
+
+/*--------- Edit Saving ---------*/
+export const editSecurity = async (req, res, next) => {
+    try {
+        const { _id, title, description } = req.body;
+        const saving = await SecurityModel.findOne({ _id: _id });
+        if (!saving)
+            return res.status(404).json({ success: false, message: "Saving not found" });
+
+        // Replace old image if new one uploaded
+        if (req.file) {
+            if (saving.image) {
+                const oldPath = path.join("public", saving.image);
+                if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
+            }
+            saving.image = `public/uploads/${req.file.filename}`;
+        }
+
+        saving.title = title || saving.title;
+        saving.description = description || saving.description;
+        await saving.save();
+
+        res.status(200).json({
+            success: true,
+            message: "Saving updated successfully",
+            data: saving,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+/*--------- Delete Saving ---------*/
+export const deleteSecurity = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+
+        const saving = await SecurityModel.findById(id);
+        if (!saving)
+            return res.status(404).json({ success: false, message: "Saving not found" });
+
+        if (saving.image) {
+            const imagePath = path.join("public", saving.image);
+            if (fs.existsSync(imagePath)) fs.unlinkSync(imagePath);
+        }
+
+        await SecurityModel.findByIdAndDelete(id);
 
         res.status(200).json({
             success: true,
@@ -1753,8 +1838,6 @@ export const updatedriverpage = async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
-
-
 }
 export const getAboutData = async (req, res) => {
   try {
@@ -1834,3 +1917,198 @@ export const updateAboutData = async (req, res) => {
   }
 };
 
+export const addaboutBanner = async (req, res, next) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({
+        success: false,
+        message: "Banner file is required",
+      });
+    }
+
+    const bannerPath = `public/uploads/${req.file.filename}`;
+
+    const existingBanner = await AboutBannerModel.findOne();
+
+    if (existingBanner) {
+      // delete old file
+      const oldPath = path.join("public", existingBanner.banner);
+
+      if (fs.existsSync(oldPath)) {
+        fs.unlinkSync(oldPath);
+      }
+
+      // update with new banner
+      existingBanner.banner = bannerPath;
+      await existingBanner.save();
+
+      return res.status(200).json({
+        success: true,
+        message: "Banner updated successfully",
+        data: existingBanner,
+      });
+    }
+
+    // create new banner
+    const banner = await AboutBannerModel.create({
+      banner: bannerPath,
+    });
+
+    return res.status(201).json({
+      success: true,
+      message: "Banner created successfully",
+      data: banner,
+    });
+
+  } catch (error) {
+    console.error("Error in addaboutBanner:", error);
+    next(error);
+  }
+};
+
+
+export const addServiceBanner = async (req, res, next) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({
+        success: false,
+        message: "Banner file is required",
+      });
+    }
+
+    const bannerPath = `public/uploads/${req.file.filename}`;
+
+    const existingBanner = await ServiceBannerModel.findOne();
+
+    if (existingBanner) {
+      // delete old file
+      const oldPath = path.join("public", existingBanner.banner);
+
+      if (fs.existsSync(oldPath)) {
+        fs.unlinkSync(oldPath);
+      }
+
+      // update with new banner
+      existingBanner.banner = bannerPath;
+      await existingBanner.save();
+
+      return res.status(200).json({
+        success: true,
+        message: "Banner updated successfully",
+        data: existingBanner,
+      });
+    }
+
+    // create new banner
+    const banner = await ServiceBannerModel.create({
+      banner: bannerPath,
+    });
+
+    return res.status(201).json({
+      success: true,
+      message: "Banner created successfully",
+      data: banner,
+    });
+
+  } catch (error) {
+    console.error("Error in addaboutBanner:", error);
+    next(error);
+  }
+};
+
+export const addHomeBgBanner = async (req, res, next) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({
+        success: false,
+        message: "Banner file is required",
+      });
+    }
+
+    const bannerPath = `public/uploads/${req.file.filename}`;
+
+    const existingBanner = await ServiceBgBannerModel.findOne();
+
+    if (existingBanner) {
+      // delete old file
+      const oldPath = path.join("public", existingBanner.banner);
+
+      if (fs.existsSync(oldPath)) {
+        fs.unlinkSync(oldPath);
+      }
+
+      // update with new banner
+      existingBanner.banner = bannerPath;
+      await existingBanner.save();
+
+      return res.status(200).json({
+        success: true,
+        message: "Banner updated successfully",
+        data: existingBanner,
+      });
+    }
+
+    // create new banner
+    const banner = await ServiceBgBannerModel.create({
+      banner: bannerPath,
+    });
+
+    return res.status(201).json({
+      success: true,
+      message: "Banner created successfully",
+      data: banner,
+    });
+
+  } catch (error) {
+    console.error("Error in addaboutBanner:", error);
+    next(error);
+  }
+};
+export const addviyagooBanner = async (req, res, next) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({
+        success: false,
+        message: "Banner file is required",
+      });
+    }
+
+    const bannerPath = `public/uploads/${req.file.filename}`;
+
+    const existingBanner = await ViyagooBannerModel.findOne();
+
+    if (existingBanner) {
+      // delete old file
+      const oldPath = path.join("public", existingBanner.banner);
+
+      if (fs.existsSync(oldPath)) {
+        fs.unlinkSync(oldPath);
+      }
+
+      // update with new banner
+      existingBanner.banner = bannerPath;
+      await existingBanner.save();
+
+      return res.status(200).json({
+        success: true,
+        message: "Banner updated successfully",
+        data: existingBanner,
+      });
+    }
+
+    // create new banner
+    const banner = await ViyagooBannerModel.create({
+      banner: bannerPath,
+    });
+
+    return res.status(201).json({
+      success: true,
+      message: "Banner created successfully",
+      data: banner,
+    });
+
+  } catch (error) {
+    console.error("Error in addaboutBanner:", error);
+    next(error);
+  }
+};

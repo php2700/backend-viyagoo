@@ -1,17 +1,17 @@
 import AboutModel from "../model/aboutModel.js";
 import AdminModel from "../model/adminModel.js";
 import BannerModel from "../model/bannerModel.js";
-import BenefitModel from "../model/benefitModel.js";
+import BenefitModel, { ServiceBgBannerModel } from "../model/benefitModel.js";
 import ClientModel from "../model/clientModel.js";
 import QuoteModel from "../model/quoteModel.js";
-import SavingModel from "../model/savingModel.js";
+import SavingModel, { SecurityModel } from "../model/savingModel.js";
 import SetModel from "../model/setModel.js";
 import StrengthModel from "../model/strengthModel.js";
 import TestImotionalModel from "../model/testimotionalModel.js";
 import Location from "../model/Location.js";
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
-import SegmentModel from "../model/segmentModel.js";
+import SegmentModel, { ServiceBannerModel } from "../model/segmentModel.js";
 import WhySegmentModel from "../model/whySegmentModel.js";
 import SegmentFleetModel from "../model/segmentFleetModel.js";
 import LogisticModel from "../model/logisticModel.js";
@@ -28,8 +28,8 @@ import FutureMobilityDetailModel from "../model/futureMobilityDetailModel.js";
 import BelieveModel from "../model/whyBelieveModel.js";
 // import DriverPage from "../model/DriverModel.js";
 // import DriverInquiry from "../model/DriverModel.js";
-import { DriverPage, DriverInquiry } from "../model/DriverModel.js";
-import { AboutUSModel } from "../model/AboutUSModel.js";
+import ViyagooBannerModel, { DriverPage, DriverInquiry } from "../model/DriverModel.js";
+import AboutBannerModel, { AboutUSModel } from "../model/AboutUSModel.js";
 
 
 
@@ -162,6 +162,21 @@ export const getSaving = async (req, res, next) => {
     }
 };
 
+
+/*--------- Get All Savings ---------*/
+export const getSecurity = async (req, res, next) => {
+    try {
+        const savings = await SecurityModel.find().sort({ createdAt: -1 });
+        console.log(savings,'ggg')
+        res.status(200).json({
+            success: true,
+            message: "Savings fetched successfully",
+            data: savings,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
 /*--------- Get Set ---------*/
 // export const getSetData = async (req, res, next) => {
 //     try {
@@ -524,4 +539,92 @@ export const getAboutData = async (req, res) => {
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
+};
+
+export const getaboutBanner = async (req, res, next) => {
+    try {
+        const banner = await AboutBannerModel.findOne();
+
+        if (!banner) {
+            return res.status(404).json({
+                success: false,
+                message: "No banner found",
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            message: "Banner fetched successfully",
+            data: banner,
+        });
+    } catch (error) {
+        console.error("Error fetching banner:", error);
+        next(error);
+    }
+};
+
+export const getServiceBanner = async (req, res, next) => {
+    try {
+        const banner = await ServiceBannerModel.findOne();
+
+        if (!banner) {
+            return res.status(404).json({
+                success: false,
+                message: "No banner found",
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            message: "Banner fetched successfully",
+            data: banner,
+        });
+    } catch (error) {
+        console.error("Error fetching banner:", error);
+        next(error);
+    }
+};
+
+export const getHomeBgBanner = async (req, res, next) => {
+    try {
+        const banner = await ServiceBgBannerModel.findOne();
+
+        if (!banner) {
+            return res.status(404).json({
+                success: false,
+                message: "No banner found",
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            message: "Banner fetched successfully",
+            data: banner,
+        });
+    } catch (error) {
+        console.error("Error fetching banner:", error);
+        next(error);
+    }
+};
+
+export const getViyagooBanner = async (req, res, next) => {
+    try {
+        const banner = await ViyagooBannerModel.findOne();
+
+        if (!banner) {
+            return res.status(404).json({
+                success: false,
+                message: "No banner found",
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            message: "Banner fetched successfully",
+            data: banner,
+        });
+    } catch (error) {
+        console.error("Error fetching banner:", error);
+        next(error);
+    }
 };

@@ -23,3 +23,15 @@ export default BenefitModel;
 
 
 
+const seviceBgannerSchema = new mongoose.Schema({
+    banner: {
+        type: String,
+        required: true
+    },
+  
+
+}, {
+    timestamps: true
+})
+
+export  const ServiceBgBannerModel = mongoose.model('serviceBgBanner', seviceBgannerSchema)

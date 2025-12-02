@@ -26,3 +26,18 @@ const driverPageSchema = new mongoose.Schema({
 
 // Note: Yahan bhi 'export const' lagana zaroori hai
 export const DriverPage = mongoose.model("DriverPage", driverPageSchema);
+
+
+const viyagooBannerSchema = new mongoose.Schema({
+    banner: {
+        type: String,
+        required: true
+    },
+  
+
+}, {
+    timestamps: true
+})
+
+const ViyagooBannerModel = mongoose.model('viyagooBanner', viyagooBannerSchema)
+export default ViyagooBannerModel;

@@ -30,3 +30,17 @@ const aboutSchema = new mongoose.Schema(
 );
 
 export const AboutUSModel = mongoose.model("About", aboutSchema);
+
+const aboutBannerSchema = new mongoose.Schema({
+    banner: {
+        type: String,
+        required: true
+    },
+  
+
+}, {
+    timestamps: true
+})
+
+const AboutBannerModel = mongoose.model('aboutBanner', aboutBannerSchema)
+export default AboutBannerModel;
