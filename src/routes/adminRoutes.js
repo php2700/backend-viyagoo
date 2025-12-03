@@ -51,14 +51,14 @@ adminRouter.post('/set-apart', authentication, authorization(['admin']), upload.
 /*------------------stragic strength------------------*/
 adminRouter.get('/get-stregic', authentication, authorization(['admin']), getStrength)
 adminRouter.post('/stregic', authentication, authorization(['admin']), upload.array("images", 5), addStragicStrength)
-adminRouter.patch('/edit-stregic', authentication, authorization(['admin']),upload.array("image", 5), editStrength)
-adminRouter.delete("/delete-stregic/:id", authentication, authorization(['admin']), upload.single("image"), deleteStrength)
+adminRouter.patch('/edit-stregic', authentication, authorization(['admin']),upload.single("image"), editStrength)
+adminRouter.delete("/delete-stregic/:id", authentication, authorization(['admin']), deleteStrength)
 
 /*------------------clients------------------*/
 adminRouter.get('/get-clients', authentication, authorization(['admin']), getClients)
 adminRouter.post('/client', authentication, authorization(['admin']), upload.array("images", 5), addClients)
-adminRouter.patch('/edit-client', authentication, authorization(['admin']), editCleient)
-adminRouter.delete("/delete-client/:id", authentication, authorization(['admin']), upload.single("image"), deleteclient)
+adminRouter.patch('/edit-client', authentication, authorization(['admin']),upload.single("image"), editCleient)
+adminRouter.delete("/delete-client/:id", authentication, authorization(['admin']),  deleteclient)
 
 /*------------------testimotional------------------*/
 adminRouter.get('/get-testimonial', authentication, authorization(['admin']), getTestimonials);

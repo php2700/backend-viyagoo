@@ -483,7 +483,7 @@ export const addSetUsPart = async (req, res, next) => {
 //         if (!req.file)
 //             return res.status(400).json({ success: false, message: "Image is required" });
 
-//         const imagePath = `/uploads/${req.file.filename}`;
+//         const imagePath = `public/uploads/${req.file.filename}`;
 
 //         const strategic = await StrengthModel.create({ image: imagePath });
 
