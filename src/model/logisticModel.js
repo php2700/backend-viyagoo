@@ -5,6 +5,10 @@ const logisticSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    mainTitle:{
+        type: String,
+        required: false
+    },
     services: [
         {
             title: {

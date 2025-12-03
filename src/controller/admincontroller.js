@@ -1003,6 +1003,7 @@ export const addLogistic = async (req, res, next) => {
             services,
             ourProcessTitle,
             whyViyagoo,
+            mainTitle
         } = req.body;
 
         const servicesArr = typeof services === "string" ? JSON.parse(services) : services;
@@ -1029,6 +1030,7 @@ export const addLogistic = async (req, res, next) => {
 
             const newLogistic = await LogisticModel.create({
                 description,
+                mainTitle,
                 services: servicesArr,
                 ourProcessImage,
                 ourProcessTitle: ourProcessTitleArr,
@@ -1057,6 +1059,7 @@ export const addLogistic = async (req, res, next) => {
             existing.ourProcessImage = ourProcessImage;
         }
         if (description) existing.description = description;
+        if(mainTitle) existing.mainTitle=mainTitle;
         if (servicesArr) existing.services = servicesArr;
         if (ourProcessTitleArr) existing.ourProcessTitle = ourProcessTitleArr;
         if (whyViyagooArr) existing.whyViyagoo = whyViyagooArr;
