@@ -28,46 +28,82 @@ import ViyagooBannerModel, { DriverInquiry, DriverPage } from "../model/DriverMo
 import AboutBannerModel, { AboutUSModel } from "../model/AboutUSModel.js";
 
 
+
+
 export const addBanner = async (req, res, next) => {
-    try {
-        if (!req.file) {
-            return res.status(400).json({
-                success: false,
-                message: "Video file is required",
-            });
-        }
-        const videoPath = `public/uploads/${req.file.filename}`;
-        const existingBanner = await BannerModel.findOne();
+  try {
+    const imageFile = req?.files?.image?.[0];
+    const videoFile = req?.files?.video?.[0];
 
-        if (existingBanner) {
-            const oldPath = path.join("public", existingBanner.video);
-            if (fs.existsSync(oldPath)) {
-                fs.unlinkSync(oldPath);
-            }
-            existingBanner.video = videoPath;
-            existingBanner.status = req.body.status ?? existingBanner.status;
-            await existingBanner.save();
-            return res.status(200).json({
-                success: true,
-                message: "Banner updated successfully",
-                data: existingBanner,
-            });
-        }
-
-        const banner = await BannerModel.create({
-            video: videoPath,
-            status: req.body.status ?? true,
-        });
-        res.status(201).json({
-            success: true,
-            message: "Banner created successfully",
-            data: banner,
-        });
-    } catch (error) {
-        console.error("Error in addBanner:", error);
-        next(error);
+    if (!imageFile && !videoFile) {
+      return res.status(400).json({
+        success: false,
+        message: "Either image or video is required",
+      });
     }
+
+    let filePath = "";
+    let fileType = "";
+
+    if (imageFile) {
+      filePath = `public/uploads/${imageFile.filename}`;
+      fileType = "image";
+    }
+
+    if (videoFile) {
+      filePath = `public/uploads/${videoFile.filename}`;
+      fileType = "video";
+    }
+
+    const existingBanner = await BannerModel.findOne();
+
+    if (existingBanner) {
+
+      const oldFile =
+        fileType === "image"
+          ? existingBanner.image
+          : existingBanner.video;
+
+      if (
+        oldFile &&
+        fs.existsSync(oldFile) &&
+        fs.lstatSync(oldFile).isFile()
+      ) {
+        fs.unlinkSync(oldFile);
+      }
+
+      existingBanner.image = fileType === "image" ? filePath : "";
+      existingBanner.video = fileType === "video" ? filePath : "";
+      existingBanner.type = fileType;
+
+      await existingBanner.save();
+
+      return res.status(200).json({
+        success: true,
+        message: "Banner updated successfully",
+        data: existingBanner,
+      });
+    }
+
+    const banner = await BannerModel.create({
+      image: fileType === "image" ? filePath : "",
+      video: fileType === "video" ? filePath : "",
+      type: fileType,
+    });
+
+    res.status(201).json({
+      success: true,
+      message: "Banner created successfully",
+      data: banner,
+    });
+
+  } catch (error) {
+    console.error("Error in addBanner:", error);
+    next(error);
+  }
 };
+
+
 
 export const addAbout = async (req, res, next) => {
     try {

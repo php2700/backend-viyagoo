@@ -14,7 +14,10 @@ adminRouter.get('/get-quote-list', authentication, authorization(['admin']), quo
 
 /*------------------banner------------------*/
 adminRouter.get('/get-banner', authentication, authorization(['admin']), getBanner)
-adminRouter.post('/banner', authentication, authorization(['admin']), uploadVideo.single("video"), addBanner)
+adminRouter.post('/banner', authentication, authorization(['admin']),   uploadVideo.fields([
+    { name: "image", maxCount: 1 },
+    { name: "video", maxCount: 1 },
+  ]), addBanner)
 
 /*------------------about us------------------*/
 adminRouter.get('/about', authentication, authorization(['admin']), getAbout)
