@@ -13,6 +13,10 @@ const aboutSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    heading:{
+         type: String,
+        required: false
+    }
 }, {
     timestamps: true
 })
