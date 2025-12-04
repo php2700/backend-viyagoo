@@ -22,4 +22,14 @@ const ChauferServiceModel = mongoose.model('chauferService', chuaferServiceSchem
 export default ChauferServiceModel;
 
 
+const chaufferHeadingSchema = new mongoose.Schema({
+        heading: {
+        type: String,
+        required: true
+    },
 
+}, {
+    timestamps: true
+})
+
+export const ChaufferHeadingModel = mongoose.model('chaufferHeading', chaufferHeadingSchema)

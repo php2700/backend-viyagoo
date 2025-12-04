@@ -5,6 +5,10 @@ const believeSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    heading:{
+type: String,
+        required: true
+    },
     services: [
         {
             title: {
@@ -19,6 +23,10 @@ const believeSchema = new mongoose.Schema({
     ],
     closingDescription: {
         type: String,
+        required: true
+    },
+    closingHeading:{
+         type: String,
         required: true
     }
 }, {

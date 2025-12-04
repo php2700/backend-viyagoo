@@ -2,27 +2,27 @@ import BannerModel from "../model/bannerModel.js";
 import fs from "fs";
 import path from "path";
 import AboutModel from "../model/aboutModel.js";
-import BenefitModel, { ServiceBgBannerModel } from "../model/benefitModel.js";
-import SavingModel, { SecurityModel } from "../model/savingModel.js";
+import BenefitModel, { BenefitHeadingModel, ServiceBgBannerModel } from "../model/benefitModel.js";
+import SavingModel, { SecurityHeadingModel, SecurityModel } from "../model/savingModel.js";
 import SetModel from "../model/setModel.js";
-import StrengthModel from "../model/strengthModel.js";
-import ClientModel from "../model/clientModel.js";
-import TestImotionalModel from "../model/testimotionalModel.js";
+import StrengthModel, { StrengthHeadingModel } from "../model/strengthModel.js";
+import ClientModel, { ClientHeadingModel } from "../model/clientModel.js";
+import TestImotionalModel, { TestimonialHeadingModel } from "../model/testimotionalModel.js";
 import SegmentModel, { ServiceBannerModel } from "../model/segmentModel.js";
-import WhySegmentModel from "../model/whySegmentModel.js";
-import SegmentFleetModel from "../model/segmentFleetModel.js";
+import WhySegmentModel, { WhySegmentHeadingModel } from "../model/whySegmentModel.js";
+import SegmentFleetModel, { FleetHeadingModel } from "../model/segmentFleetModel.js";
 import ChauferModel from "../model/chauferModel.js";
 import ChauferEdgeModel from "../model/chauferEdgeModel.js";
-import ChauferServiceModel from "../model/chauferServiceModel.js";
-import CorporateModel from "../model/corporateModel.js";
+import ChauferServiceModel, { ChaufferHeadingModel } from "../model/chauferServiceModel.js";
+import CorporateModel, { CorporateHeadingModel } from "../model/corporateModel.js";
 import ChauferEdgeDetailModel from "../model/chauferEdgeDetailModel.js";
 import TransportationModel from "../model/transportationModel.js";
-import BusinessTransportationModel from "../model/businessTransportationModel.js";
+import BusinessTransportationModel, { BusinessHeadingModel } from "../model/businessTransportationModel.js";
 import FutureMobilityModel from "../model/futureMobilityModel.js";
 import FutureMobilityDetailModel from "../model/futureMobilityDetailModel.js";
 import BelieveModel from "../model/whyBelieveModel.js";
 import LogisticModel from "../model/logisticModel.js";
-import WhytransportationModel from "../model/whyTransPortationModel.js";
+import WhytransportationModel, { TransportHeadingModel } from "../model/whyTransPortationModel.js";
 // ✅ YEH SAHI HAI (Curly Braces lagayein):
 import ViyagooBannerModel, { DriverInquiry, DriverPage } from "../model/DriverModel.js";
 import AboutBannerModel, { AboutUSModel } from "../model/AboutUSModel.js";
@@ -188,6 +188,273 @@ export const addBenefit = async (req, res, next) => {
         res.status(201).json({
             success: true,
             message: "Benefit added successfully",
+            data: benefit,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+
+export const addBenefitHeading = async (req, res, next) => {
+    try {
+        const { heading } = req.body;
+        if (!heading) return res.status(400).json({ success: false, message: "All field is required" });
+
+        const benefit = await BenefitHeadingModel.findOneAndUpdate(
+            {},
+            { heading },
+            {
+                new: true,
+                upsert: true,
+            }
+        );
+
+        res.status(201).json({
+            success: true,
+            message: "Benefit updated successfully",
+            data: benefit,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const addSecurityHeading = async (req, res, next) => {
+    try {
+        const { heading } = req.body;
+        if (!heading) return res.status(400).json({ success: false, message: "All field is required" });
+
+        const benefit = await SecurityHeadingModel.findOneAndUpdate(
+            {},
+            { heading },
+            {
+                new: true,
+                upsert: true,
+            }
+        );
+
+        res.status(201).json({
+            success: true,
+            message: "security updated successfully",
+            data: benefit,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const addStrageticHeading = async (req, res, next) => {
+    try {
+        const { heading } = req.body;
+        if (!heading) return res.status(400).json({ success: false, message: "All field is required" });
+
+        const benefit = await StrengthHeadingModel.findOneAndUpdate(
+            {},
+            { heading },
+            {
+                new: true,
+                upsert: true,
+            }
+        );
+
+        res.status(201).json({
+            success: true,
+            message: "strength Heading updated successfully",
+            data: benefit,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const addClientHeading = async (req, res, next) => {
+    try {
+        const { heading } = req.body;
+        if (!heading) return res.status(400).json({ success: false, message: "All field is required" });
+
+        const benefit = await ClientHeadingModel.findOneAndUpdate(
+            {},
+            { heading },
+            {
+                new: true,
+                upsert: true,
+            }
+        );
+
+        res.status(201).json({
+            success: true,
+            message: "client Heading updated successfully",
+            data: benefit,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const addTestimonialHeading = async (req, res, next) => {
+    try {
+        const { heading } = req.body;
+        if (!heading) return res.status(400).json({ success: false, message: "All field is required" });
+
+        const benefit = await TestimonialHeadingModel.findOneAndUpdate(
+            {},
+            { heading },
+            {
+                new: true,
+                upsert: true,
+            }
+        );
+
+        res.status(201).json({
+            success: true,
+            message: "testimonial Heading updated successfully",
+            data: benefit,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const addWhySegmentHeading = async (req, res, next) => {
+    try {
+        const { heading } = req.body;
+        if (!heading) return res.status(400).json({ success: false, message: "All field is required" });
+
+        const benefit = await WhySegmentHeadingModel.findOneAndUpdate(
+            {},
+            { heading },
+            {
+                new: true,
+                upsert: true,
+            }
+        );
+
+        res.status(201).json({
+            success: true,
+            message: "why segment Heading updated successfully",
+            data: benefit,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const addSegmentFleetHeading = async (req, res, next) => {
+    try {
+        const { heading } = req.body;
+        if (!heading) return res.status(400).json({ success: false, message: "All field is required" });
+
+        const benefit = await FleetHeadingModel.findOneAndUpdate(
+            {},
+            { heading },
+            {
+                new: true,
+                upsert: true,
+            }
+        );
+
+        res.status(201).json({
+            success: true,
+            message: "segment fleet Heading updated successfully",
+            data: benefit,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+
+export const addCorporateHeading = async (req, res, next) => {
+    try {
+        const { heading } = req.body;
+        if (!heading) return res.status(400).json({ success: false, message: "All field is required" });
+
+        const benefit = await CorporateHeadingModel.findOneAndUpdate(
+            {},
+            { heading },
+            {
+                new: true,
+                upsert: true,
+            }
+        );
+
+        res.status(201).json({
+            success: true,
+            message: "corporate Heading updated successfully",
+            data: benefit,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const addBusinessHeading = async (req, res, next) => {
+    try {
+        const { heading,description1,description2 } = req.body;
+        if (!heading) return res.status(400).json({ success: false, message: "All field is required" });
+
+        const benefit = await BusinessHeadingModel.findOneAndUpdate(
+            {},
+            { heading,description1,description2 },
+            {
+                new: true,
+                upsert: true,
+            }
+        );
+
+        res.status(201).json({
+            success: true,
+            message: "business Heading updated successfully",
+            data: benefit,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const addWhyTransHeading = async (req, res, next) => {
+    try {
+        const { heading,description } = req.body;
+        if (!heading || !description) return res.status(400).json({ success: false, message: "All field is required" });
+
+        const benefit = await TransportHeadingModel.findOneAndUpdate(
+            {},
+            { heading,description },
+            {
+                new: true,
+                upsert: true,
+            }
+        );
+
+        res.status(201).json({
+            success: true,
+            message: "transportation Heading updated successfully",
+            data: benefit,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+
+export const addChaufferServiceHeading = async (req, res, next) => {
+    try {
+        const { heading } = req.body;
+        if (!heading) return res.status(400).json({ success: false, message: "All field is required" });
+
+        const benefit = await ChaufferHeadingModel.findOneAndUpdate(
+            {},
+            { heading },
+            {
+                new: true,
+                upsert: true,
+            }
+        );
+
+        res.status(201).json({
+            success: true,
+            message: "chauffer Heading updated successfully",
             data: benefit,
         });
     } catch (error) {
@@ -424,7 +691,7 @@ export const deleteSecurity = async (req, res, next) => {
 
 export const addSetUsPart = async (req, res, next) => {
     try {
-        const { description,heading } = req.body;
+        const { description, heading } = req.body;
 
         // Get current set record
         let existingSet = await SetModel.findOne();
@@ -449,7 +716,7 @@ export const addSetUsPart = async (req, res, next) => {
                 if (fs.existsSync(oldSmallPath)) fs.unlinkSync(oldSmallPath);
             }
 
-            
+
             existingSet.heading = heading;
 
             existingSet.image = imagePath;
@@ -466,7 +733,7 @@ export const addSetUsPart = async (req, res, next) => {
 
         // Otherwise, create new record
         const newSet = await SetModel.create({
-            image: imagePath,heading,
+            image: imagePath, heading,
             smallImage: smallImagePath,
             description,
         });
@@ -772,7 +1039,7 @@ export const deleteTestimonial = async (req, res, next) => {
 
 export const addEvSegment = async (req, res, next) => {
     try {
-        const { about, evAdvantage, services } = req.body;
+        const { about, evAdvantage, services, aboutHeading, evAdvantageHeading } = req.body;
 
         if (!about || !evAdvantage || !services) {
             return res.status(400).json({
@@ -787,6 +1054,8 @@ export const addEvSegment = async (req, res, next) => {
             existing.about = about;
             existing.evAdvantage = evAdvantage;
             existing.services = parsedServices;
+            existing.aboutHeading = aboutHeading;
+            existing.evAdvantageHeading = evAdvantageHeading;
             await existing.save();
 
             return res.status(200).json({
@@ -799,7 +1068,7 @@ export const addEvSegment = async (req, res, next) => {
         const newSegment = await SegmentModel.create({
             about,
             evAdvantage,
-            services: parsedServices,
+            services: parsedServices, aboutHeading, evAdvantageHeading
         });
 
         return res.status(201).json({
@@ -1007,7 +1276,9 @@ export const addLogistic = async (req, res, next) => {
             services,
             ourProcessTitle,
             whyViyagoo,
-            mainTitle
+            mainTitle,
+            processHeading,
+            viyagooHeading
         } = req.body;
 
         const servicesArr = typeof services === "string" ? JSON.parse(services) : services;
@@ -1040,6 +1311,8 @@ export const addLogistic = async (req, res, next) => {
                 ourProcessTitle: ourProcessTitleArr,
                 whyViyagooImage,
                 whyViyagoo: whyViyagooArr,
+                processHeading,
+                viyagooHeading
             });
 
             return res.status(201).json({
@@ -1067,6 +1340,8 @@ export const addLogistic = async (req, res, next) => {
         if (servicesArr) existing.services = servicesArr;
         if (ourProcessTitleArr) existing.ourProcessTitle = ourProcessTitleArr;
         if (whyViyagooArr) existing.whyViyagoo = whyViyagooArr;
+        if (processHeading) existing.processHeading = processHeading;
+        if (viyagooHeading) existing.viyagooHeading = viyagooHeading
 
         await existing.save();
 
@@ -1084,7 +1359,7 @@ export const addLogistic = async (req, res, next) => {
 
 export const addChaufer = async (req, res, next) => {
     try {
-        let { description, mobility } = req.body;
+        let { description, mobility, mobilityHeading } = req.body;
 
 
         let existing = await ChauferModel.findOne();
@@ -1093,7 +1368,7 @@ export const addChaufer = async (req, res, next) => {
         if (!existing) {
             const newData = await ChauferModel.create({
                 description,
-                mobility,
+                mobility, mobilityHeading
             });
 
             return res.status(201).json({
@@ -1106,6 +1381,7 @@ export const addChaufer = async (req, res, next) => {
         /* ---------------- UPDATE ---------------- */
         if (description) existing.description = description;
         if (mobility) existing.mobility = mobility;
+        if (mobilityHeading) existing.mobilityHeading = mobilityHeading
 
         await existing.save();
 
@@ -1122,13 +1398,13 @@ export const addChaufer = async (req, res, next) => {
 
 export const addViyagooEdge = async (req, res, next) => {
     try {
-        let { description } = req.body;
+        let { description, edgeHeading } = req.body;
 
 
         let existing = await ChauferEdgeModel.findOne();
         if (!existing) {
             const newData = await ChauferEdgeModel.create({
-                description,
+                description, edgeHeading
             });
 
             return res.status(201).json({
@@ -1140,6 +1416,7 @@ export const addViyagooEdge = async (req, res, next) => {
 
         /* ---------------- UPDATE ---------------- */
         if (description) existing.description = description;
+        if (edgeHeading) existing.edgeHeading = edgeHeading;
 
         await existing.save();
 
@@ -1428,7 +1705,8 @@ export const upsertTransportation = async (req, res) => {
             title3,
             description3,
             title4,
-            description4
+            description4,
+            growingHeading
         } = req.body;
 
         const existing = await TransportationModel.findOne();
@@ -1468,6 +1746,9 @@ export const upsertTransportation = async (req, res) => {
             existing.description3 = description3;
             existing.title4 = title4;
             existing.description4 = description4;
+            existing.growingHeading = growingHeading;
+
+
 
             await existing.save();
 
@@ -1489,6 +1770,7 @@ export const upsertTransportation = async (req, res) => {
             title3,
             description3,
             title4,
+            growingHeading,
             description4,
             ...newImages,
         });
@@ -1675,7 +1957,7 @@ export const deleteBusinessTransportation = async (req, res) => {
 
 export const addFutureMobility = async (req, res) => {
     try {
-        const { description } = req.body;
+        const { description, heading } = req.body;
 
         if (!description)
             return res.status(400).json({ success: false, message: "Description is required" });
@@ -1693,7 +1975,7 @@ export const addFutureMobility = async (req, res) => {
 
                 existing.image = "public/uploads/" + req.file.filename;
             }
-
+            existing.heading = heading;
             existing.description = description;
 
             await existing.save();
@@ -1711,7 +1993,7 @@ export const addFutureMobility = async (req, res) => {
 
         const newData = await FutureMobilityModel.create({
             description,
-            image: "public/uploads/" + req.file.filename,
+            image: "public/uploads/" + req.file.filename, heading
         });
 
         return res.status(201).json({
@@ -1807,13 +2089,15 @@ export const deleteFututreDetail = async (req, res) => {
 
 export const addBelieveTransportation = async (req, res) => {
     try {
-        const { services, closingDescription, description } = req.body;
+        const { services, closingDescription, description, heading,closingHeading } = req.body;
         const existing = await BelieveModel.findOne();
         let saveData;
 
         if (existing) {
             existing.description = description;
             existing.services = services;
+            existing.heading = heading;
+            existing.closingHeading = closingHeading;
             existing.closingDescription = closingDescription;
 
             saveData = await existing.save();
@@ -1827,8 +2111,8 @@ export const addBelieveTransportation = async (req, res) => {
 
         saveData = await BelieveModel.create({
             description,
-            services,
-            closingDescription,
+            services, heading,
+            closingDescription,closingHeading
         });
 
         return res.status(201).json({
@@ -2062,7 +2346,7 @@ export const addServiceBanner = async (req, res, next) => {
 export const addHomeBgBanner = async (req, res, next) => {
     try {
 
-        const {heading}=req?.body;
+        const { heading } = req?.body;
         if (!req.file) {
             return res.status(400).json({
                 success: false,
@@ -2084,7 +2368,7 @@ export const addHomeBgBanner = async (req, res, next) => {
 
             // update with new banner
             existingBanner.banner = bannerPath;
-        existingBanner.heading=heading
+            existingBanner.heading = heading
             await existingBanner.save();
 
             return res.status(200).json({

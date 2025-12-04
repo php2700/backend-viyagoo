@@ -1,9 +1,9 @@
 import { Router } from "express";
 import { authentication } from "../middleware/authentication.js";
 import { authorization } from "../middleware/authorization.js";
-import { addAbout, addBanner, addBelieveTransportation, addBenefit, addBusinessTransportation, addChaufer, addChauferService, addClients, addCorporate, addEvSegment, addFutureMobility, addFututreDetail, addLogistic, addSaving, addSegmentFleet, addSetUsPart, addStragicStrength, addTestimonial, addViyagooEdge, addViyagooEdgeDetail, addWhySegment, addWhyTransportation, deleteBenefit, deleteBusinessTransportation, deleteChauferService, deleteclient, deleteCorporate, deleteFututreDetail, deleteSaving, deleteSegmentFleet, deleteStrength, deleteTestimonial, deleteViyagooEdgeDetail, deleteWhySegment, deleteWhyTransportation, editBenefit, editCleient, editSaving, editSegmentFleet, editStrength, editTestimonial, editWhySegment, updateBusinessTransportation, updateChauferService, updateCorporate, updateFututreDetail, updateViyagooEdgeDetail, updateWhyTransportation, upsertTransportation ,driverinquiries,driverpagecontent,updatedriverpage,getAboutData,updateAboutData, editSecurity, addSecurity, deleteSecurity, addaboutBanner, addviyagooBanner, addServiceBanner, addHomeBgBanner} from "../controller/admincontroller.js";
+import { addAbout, addBanner, addBelieveTransportation, addBenefit, addBusinessTransportation, addChaufer, addChauferService, addClients, addCorporate, addEvSegment, addFutureMobility, addFututreDetail, addLogistic, addSaving, addSegmentFleet, addSetUsPart, addStragicStrength, addTestimonial, addViyagooEdge, addViyagooEdgeDetail, addWhySegment, addWhyTransportation, deleteBenefit, deleteBusinessTransportation, deleteChauferService, deleteclient, deleteCorporate, deleteFututreDetail, deleteSaving, deleteSegmentFleet, deleteStrength, deleteTestimonial, deleteViyagooEdgeDetail, deleteWhySegment, deleteWhyTransportation, editBenefit, editCleient, editSaving, editSegmentFleet, editStrength, editTestimonial, editWhySegment, updateBusinessTransportation, updateChauferService, updateCorporate, updateFututreDetail, updateViyagooEdgeDetail, updateWhyTransportation, upsertTransportation ,driverinquiries,driverpagecontent,updatedriverpage,getAboutData,updateAboutData, editSecurity, addSecurity, deleteSecurity, addaboutBanner, addviyagooBanner, addServiceBanner, addHomeBgBanner, addBenefitHeading, addSecurityHeading, addStrageticHeading, addClientHeading, addTestimonialHeading, addWhySegmentHeading, addSegmentFleetHeading, addChaufferServiceHeading, addCorporateHeading, addWhyTransHeading, addBusinessHeading} from "../controller/admincontroller.js";
 import upload from '../middleware/upload.js';
-import { getAbout, getaboutBanner, getBanner, getBelieveTransportation, getBenefit, getBusinessTransportation, getChaufer, getChauferService, getClients, getCorporate, getEvSegment, getFutureMobility, getFututreDetail, getHomeBgBanner, getLogistic, getSaving, getSecurity, getSegmentFleet, getServiceBanner, getSetData, getStrength, getTestimonials, getTransportation, getViyagooBanner, getViyagooEdge, getViyagooEdgeDetail, getWhySegment, getWhyTransportation, Login, quotelist, } from "../controller/userController.js";
+import { getAbout, getaboutBanner, getBanner, getBelieveTransportation, getBenefit, getBenefitHeading, getBusinessHeading, getBusinessTransportation, getChaufer, getChauferService, getchaufferServiceHeading, getClientHeading, getClients, getCorporate, getCorporateHeading, getEvSegment, getFutureMobility, getFututreDetail, getHomeBgBanner, getLogistic, getSaving, getSecurity, getSecurityHeading, getSegmentFleet, getSegmentFleetHeading, getServiceBanner, getSetData, getStrageticHeading, getStrength, getTestimonialHeading, getTestimonials, getTransportation, getViyagooBanner, getViyagooEdge, getViyagooEdgeDetail, getWhySegment, getWhySegmentHeading, getWhyTransportation, getWhyTransportHeading, Login, quotelist, } from "../controller/userController.js";
 import uploadVideo from "../middleware/videoupload.js";
 
 const adminRouter = Router();
@@ -27,6 +27,8 @@ adminRouter.post('/about', authentication, authorization(['admin']), upload.sing
 adminRouter.get('/home-bg-banner', authentication, authorization(['admin']), getHomeBgBanner)
 adminRouter.post('/home-bg-banner', authentication, authorization(['admin']), upload.single("banner"), addHomeBgBanner)
 
+adminRouter.get('/benefit-heading', authentication, authorization(['admin']), getBenefitHeading);
+adminRouter.post('/benefit-heading', authentication, authorization(['admin']),addBenefitHeading);
 adminRouter.get('/get-benefit', authentication, authorization(['admin']), getBenefit);
 adminRouter.post('/benefit', authentication, authorization(['admin']), upload.single("image"), addBenefit);
 adminRouter.patch('/edit-benefit', authentication, authorization(['admin']), upload.single("image"), editBenefit);
@@ -39,6 +41,8 @@ adminRouter.post('/saving', authentication, authorization(['admin']), upload.sin
 adminRouter.delete("/delete-saving/:id", authentication, authorization(['admin']), deleteSaving)
 
 /*------------------security------------------*/
+adminRouter.get('/security-heading', authentication, authorization(['admin']), getSecurityHeading);
+adminRouter.post('/security-heading', authentication, authorization(['admin']),addSecurityHeading);
 adminRouter.get('/get-security', authentication, authorization(['admin']), getSecurity)
 adminRouter.patch('/security', authentication, authorization(['admin']), upload.single("image"), editSecurity)
 adminRouter.post('/security', authentication, authorization(['admin']), upload.single("image"), addSecurity)
@@ -49,18 +53,24 @@ adminRouter.get('/get-what-set-apart', authentication, authorization(['admin']),
 adminRouter.post('/set-apart', authentication, authorization(['admin']), upload.fields([{ name: "image", maxCount: 1 }, { name: "smallImage", maxCount: 1 },]), addSetUsPart)
 
 /*------------------stragic strength------------------*/
+adminRouter.get('/stregic-heading', authentication, authorization(['admin']), getStrageticHeading);
+adminRouter.post('/stregic-heading', authentication, authorization(['admin']),addStrageticHeading);
 adminRouter.get('/get-stregic', authentication, authorization(['admin']), getStrength)
 adminRouter.post('/stregic', authentication, authorization(['admin']), upload.array("images", 5), addStragicStrength)
 adminRouter.patch('/edit-stregic', authentication, authorization(['admin']),upload.single("image"), editStrength)
 adminRouter.delete("/delete-stregic/:id", authentication, authorization(['admin']), deleteStrength)
 
 /*------------------clients------------------*/
+adminRouter.get('/client-heading', authentication, authorization(['admin']), getClientHeading);
+adminRouter.post('/client-heading', authentication, authorization(['admin']),addClientHeading);
 adminRouter.get('/get-clients', authentication, authorization(['admin']), getClients)
 adminRouter.post('/client', authentication, authorization(['admin']), upload.array("images", 5), addClients)
 adminRouter.patch('/edit-client', authentication, authorization(['admin']),upload.single("image"), editCleient)
 adminRouter.delete("/delete-client/:id", authentication, authorization(['admin']),  deleteclient)
 
 /*------------------testimotional------------------*/
+adminRouter.get('/testimonial-heading', authentication, authorization(['admin']), getTestimonialHeading);
+adminRouter.post('/testimonial-heading', authentication, authorization(['admin']),addTestimonialHeading);
 adminRouter.get('/get-testimonial', authentication, authorization(['admin']), getTestimonials);
 adminRouter.post('/testimonial', authentication, authorization(['admin']), addTestimonial);
 adminRouter.patch('/edit-testimonial', authentication, authorization(['admin']), editTestimonial);
@@ -80,12 +90,16 @@ adminRouter.get('/segment', authentication, authorization(['admin']), getEvSegme
 adminRouter.post('/segment', authentication, authorization(['admin']), addEvSegment)
 
 /*------------------------why ev segment -------*/
+adminRouter.get('/why-segment-heading', authentication, authorization(['admin']), getWhySegmentHeading);
+adminRouter.post('/why-segment-heading', authentication, authorization(['admin']),addWhySegmentHeading);
 adminRouter.get('/why-segment', authentication, authorization(['admin']), getWhySegment)
 adminRouter.patch('/why-segment', authentication, authorization(['admin']), upload.single("image"), editWhySegment)
 adminRouter.post('/why-segment', authentication, authorization(['admin']), upload.single("image"), addWhySegment)
 adminRouter.delete("/why-segment/:id", authentication, authorization(['admin']), deleteWhySegment)
 
 /*------------------------our fleet -------*/
+adminRouter.get('/segment-fleet-heading', authentication, authorization(['admin']), getSegmentFleetHeading);
+adminRouter.post('/segment-fleet-heading', authentication, authorization(['admin']),addSegmentFleetHeading);
 adminRouter.get('/segment-fleet', authentication, authorization(['admin']), getSegmentFleet)
 adminRouter.patch('/segment-fleet', authentication, authorization(['admin']), upload.single("image"), editSegmentFleet)
 adminRouter.post('/segment-fleet', authentication, authorization(['admin']), upload.single("image"), addSegmentFleet)
@@ -105,12 +119,16 @@ adminRouter.get('/chaufer', authentication, authorization(['admin']), getChaufer
 adminRouter.post('/chaufer', authentication, authorization(['admin']), addChaufer)
 
 /*------------------------chaufer services---------------*/
+adminRouter.get('/chaufer-service-heading', authentication, authorization(['admin']), getchaufferServiceHeading);
+adminRouter.post('/chaufer-service-heading', authentication, authorization(['admin']),addChaufferServiceHeading);
 adminRouter.get('/chaufer-service', authentication, authorization(['admin']), getChauferService)
 adminRouter.post('/chaufer-service', authentication, authorization(['admin']), upload.single("image"), addChauferService)
 adminRouter.patch('/chaufer-service', authentication, authorization(['admin']), upload.single("image"), updateChauferService)
 adminRouter.delete('/chaufer-service/:id', authentication, authorization(['admin']), deleteChauferService)
 
 /*------------------------corporate---------------*/
+adminRouter.get('/corporate-heading', authentication, authorization(['admin']), getCorporateHeading);
+adminRouter.post('/corporate-heading', authentication, authorization(['admin']),addCorporateHeading);
 adminRouter.get('/corporate', authentication, authorization(['admin']), getCorporate)
 adminRouter.post('/corporate', authentication, authorization(['admin']), upload.single("image"), addCorporate)
 adminRouter.patch('/corporate', authentication, authorization(['admin']), upload.single("image"), updateCorporate)
@@ -135,12 +153,16 @@ adminRouter.post('/transportation', authentication, authorization(['admin']), up
 ]), upsertTransportation)
 
 /*------------------------why transportation---------------*/
+adminRouter.get('/transportation-heading', authentication, authorization(['admin']), getWhyTransportHeading);
+adminRouter.post('/transportation-heading', authentication, authorization(['admin']),addWhyTransHeading);
 adminRouter.get('/why-transportation', authentication, authorization(['admin']), getWhyTransportation)
 adminRouter.post('/why-transportation', authentication, authorization(['admin']), upload.single("image"), addWhyTransportation)
 adminRouter.patch('/why-transportation', authentication, authorization(['admin']), upload.single("image"), updateWhyTransportation)
 adminRouter.delete('/why-transportation/:id', authentication, authorization(['admin']), deleteWhyTransportation)
 
 /*------------------------business transportation---------------*/
+adminRouter.get('/business-heading', authentication, authorization(['admin']), getBusinessHeading);
+adminRouter.post('/business-heading', authentication, authorization(['admin']),addBusinessHeading);
 adminRouter.get('/business-transportation', authentication, authorization(['admin']), getBusinessTransportation)
 adminRouter.post('/business-transportation', authentication, authorization(['admin']), upload.single("image"), addBusinessTransportation)
 adminRouter.patch('/business-transportation', authentication, authorization(['admin']), upload.single("image"), updateBusinessTransportation)

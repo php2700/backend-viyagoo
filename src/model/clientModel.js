@@ -15,3 +15,14 @@ export default ClientModel;
 
 
 
+const clientheadingSchema = new mongoose.Schema({
+    heading: {
+        type: String,
+        required: true
+    },
+
+}, {
+    timestamps: true
+})
+
+export const ClientHeadingModel = mongoose.model('ClientHeading', clientheadingSchema)

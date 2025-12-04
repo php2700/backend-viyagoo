@@ -10,6 +10,10 @@ const futureMobilitySchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    heading:{
+          type: String,
+        required: true
+    }
 }, {
     timestamps: true
 })

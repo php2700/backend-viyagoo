@@ -1,28 +1,28 @@
 import AboutModel from "../model/aboutModel.js";
 import AdminModel from "../model/adminModel.js";
 import BannerModel from "../model/bannerModel.js";
-import BenefitModel, { ServiceBgBannerModel } from "../model/benefitModel.js";
-import ClientModel from "../model/clientModel.js";
+import BenefitModel, { BenefitHeadingModel, ServiceBgBannerModel } from "../model/benefitModel.js";
+import ClientModel, { ClientHeadingModel } from "../model/clientModel.js";
 import QuoteModel from "../model/quoteModel.js";
-import SavingModel, { SecurityModel } from "../model/savingModel.js";
+import SavingModel, { SecurityHeadingModel, SecurityModel } from "../model/savingModel.js";
 import SetModel from "../model/setModel.js";
-import StrengthModel from "../model/strengthModel.js";
-import TestImotionalModel from "../model/testimotionalModel.js";
+import StrengthModel, { StrengthHeadingModel } from "../model/strengthModel.js";
+import TestImotionalModel, { TestimonialHeadingModel } from "../model/testimotionalModel.js";
 import Location from "../model/Location.js";
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import SegmentModel, { ServiceBannerModel } from "../model/segmentModel.js";
-import WhySegmentModel from "../model/whySegmentModel.js";
-import SegmentFleetModel from "../model/segmentFleetModel.js";
+import WhySegmentModel, { WhySegmentHeadingModel } from "../model/whySegmentModel.js";
+import SegmentFleetModel, { FleetHeadingModel } from "../model/segmentFleetModel.js";
 import LogisticModel from "../model/logisticModel.js";
 import ChauferModel from "../model/chauferModel.js";
 import ChauferEdgeModel from "../model/chauferEdgeModel.js";
-import ChauferServiceModel from "../model/chauferServiceModel.js";
-import CorporateModel from "../model/corporateModel.js";
+import ChauferServiceModel, { ChaufferHeadingModel } from "../model/chauferServiceModel.js";
+import CorporateModel, { CorporateHeadingModel } from "../model/corporateModel.js";
 import ChauferEdgeDetailModel from "../model/chauferEdgeDetailModel.js";
 import TransportationModel from "../model/transportationModel.js";
-import WhytransportationModel from "../model/whyTransPortationModel.js";
-import BusinessTransportationModel from "../model/businessTransportationModel.js";
+import WhytransportationModel, { TransportHeadingModel } from "../model/whyTransPortationModel.js";
+import BusinessTransportationModel, { BusinessHeadingModel } from "../model/businessTransportationModel.js";
 import FutureMobilityModel from "../model/futureMobilityModel.js";
 import FutureMobilityDetailModel from "../model/futureMobilityDetailModel.js";
 import BelieveModel from "../model/whyBelieveModel.js";
@@ -141,6 +141,139 @@ export const getBenefit = async (req, res, next) => {
         res.status(200).json({
             success: true,
             message: "Benefits fetched successfully",
+            data: benefits,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const getBenefitHeading = async (req, res, next) => {
+    try {
+        const benefits = await BenefitHeadingModel.findOne()
+        res.status(200).json({
+            success: true,
+            message: "Benefits fetched successfully",
+            data: benefits,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+
+
+export const getSecurityHeading = async (req, res, next) => {
+    try {
+        const benefits = await SecurityHeadingModel.findOne()
+        res.status(200).json({
+            success: true,
+            message: "security fetched successfully",
+            data: benefits,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const getStrageticHeading = async (req, res, next) => {
+    try {
+        const benefits = await StrengthHeadingModel.findOne()
+        res.status(200).json({
+            success: true,
+            message: "strategic fetched successfully",
+            data: benefits,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const getClientHeading = async (req, res, next) => {
+    try {
+        const benefits = await ClientHeadingModel.findOne()
+        res.status(200).json({
+            success: true,
+            message: "client heading fetched successfully",
+            data: benefits,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const getTestimonialHeading = async (req, res, next) => {
+    try {
+        const benefits = await TestimonialHeadingModel.findOne()
+        res.status(200).json({
+            success: true,
+            message: "testimonial heading fetched successfully",
+            data: benefits,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const getWhySegmentHeading = async (req, res, next) => {
+    try {
+        const benefits = await WhySegmentHeadingModel.findOne()
+        res.status(200).json({
+            success: true,
+            message: "why segment heading fetched successfully",
+            data: benefits,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const getSegmentFleetHeading = async (req, res, next) => {
+    try {
+        const benefits = await FleetHeadingModel.findOne()
+        res.status(200).json({
+            success: true,
+            message: "segment fleet heading fetched successfully",
+            data: benefits,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+
+export const getBusinessHeading = async (req, res, next) => {
+    try {
+        const benefits = await BusinessHeadingModel.findOne()
+        res.status(200).json({
+            success: true,
+            message: "business heading fetched successfully",
+            data: benefits,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const getWhyTransportHeading = async (req, res, next) => {
+    try {
+        const benefits = await TransportHeadingModel.findOne()
+        res.status(200).json({
+            success: true,
+            message: "why transport heading fetched successfully",
+            data: benefits,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const getchaufferServiceHeading = async (req, res, next) => {
+    try {
+        const benefits = await ChaufferHeadingModel.findOne()
+        res.status(200).json({
+            success: true,
+            message: "chauffer heading fetched successfully",
             data: benefits,
         });
     } catch (error) {
@@ -433,6 +566,20 @@ export const getCorporate = async (req, res) => {
         return res.status(500).json({ success: false, error: error.message });
     }
 };
+
+export const getCorporateHeading = async (req, res, next) => {
+    try {
+        const benefits = await CorporateHeadingModel.findOne()
+        res.status(200).json({
+            success: true,
+            message: "testimonial heading fetched successfully",
+            data: benefits,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
 
 export const getViyagooEdgeDetail = async (req, res) => {
     try {

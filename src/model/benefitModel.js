@@ -39,3 +39,17 @@ const seviceBgannerSchema = new mongoose.Schema({
 })
 
 export  const ServiceBgBannerModel = mongoose.model('serviceBgBanner', seviceBgannerSchema)
+
+
+const headingSchema = new mongoose.Schema({
+    heading:{
+       type: String,
+        required: false
+    }
+  
+
+}, {
+    timestamps: true
+})
+
+export  const BenefitHeadingModel = mongoose.model('benefitHeading', headingSchema)

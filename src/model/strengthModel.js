@@ -13,5 +13,15 @@ const strengthSchema = new mongoose.Schema({
 const StrengthModel = mongoose.model('strength', strengthSchema)
 export default StrengthModel;
 
+const headingSchema = new mongoose.Schema({
+        heading: {
+        type: String,
+        required: true
+    },
 
+}, {
+    timestamps: true
+})
+
+export const StrengthHeadingModel = mongoose.model('strengthHeading', headingSchema)
 

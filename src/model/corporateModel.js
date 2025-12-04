@@ -22,4 +22,14 @@ const CorporateModel = mongoose.model('corporate', corporateSchema)
 export default CorporateModel;
 
 
+const corporateHeadingSchema = new mongoose.Schema({
+        heading: {
+        type: String,
+        required: true
+    },
 
+}, {
+    timestamps: true
+})
+
+export const CorporateHeadingModel = mongoose.model('corporateHeading', corporateHeadingSchema)

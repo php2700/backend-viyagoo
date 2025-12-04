@@ -45,4 +45,15 @@ export const SecurityModel = mongoose.model('security', securitySchema)
 
 
 
+const headingSchema = new mongoose.Schema({
+    heading:{
+       type: String,
+        required: false
+    }
+  
 
+}, {
+    timestamps: true
+})
+
+export  const SecurityHeadingModel = mongoose.model('securityHeading', headingSchema)

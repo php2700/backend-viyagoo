@@ -5,6 +5,14 @@ const segmentSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    aboutHeading: {
+        type: String,
+        required: true
+    },
+    evAdvantageHeading: {
+        type: String,
+        required: true
+    },
     evAdvantage: {
         type: String,
         required: true
@@ -36,10 +44,10 @@ const serviceBannerSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-  
+
 
 }, {
     timestamps: true
 })
 
-export  const ServiceBannerModel = mongoose.model('serviceBanner', serviceBannerSchema)
+export const ServiceBannerModel = mongoose.model('serviceBanner', serviceBannerSchema)

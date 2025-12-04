@@ -22,3 +22,14 @@ export default WhySegmentModel;
 
 
 
+const SegmentHeadingSchema = new mongoose.Schema({
+        heading: {
+        type: String,
+        required: true
+    },
+
+}, {
+    timestamps: true
+})
+
+export const WhySegmentHeadingModel = mongoose.model('WhySegmentHeading', SegmentHeadingSchema)

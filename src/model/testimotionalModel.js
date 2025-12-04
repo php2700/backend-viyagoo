@@ -23,3 +23,16 @@ export default TestImotionalModel;
 
 
 
+const testimonialheadingSchema = new mongoose.Schema({
+    heading: {
+        type: String,
+        required: true
+    },
+
+}, {
+    timestamps: true
+})
+
+export const TestimonialHeadingModel = mongoose.model('TestimonialHeading', testimonialheadingSchema)
+
+

@@ -5,7 +5,15 @@ const logisticSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    mainTitle:{
+    mainTitle: {
+        type: String,
+        required: false
+    },
+    processHeading: {
+        type: String,
+        required: false
+    },
+    viyagooHeading: {
         type: String,
         required: false
     },

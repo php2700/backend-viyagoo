@@ -5,6 +5,10 @@ const chauferSchema = new mongoose.Schema({
         type: [String],
         required: true
     },
+    mobilityHeading: {
+        type: String,
+        required: true
+    },
     mobility: [
         {
             title: {

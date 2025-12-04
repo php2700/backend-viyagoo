@@ -5,6 +5,10 @@ const chauferEdgeSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    edgeHeading:{
+          type: String,
+        required: true
+    }
 
 }, {
     timestamps: true
