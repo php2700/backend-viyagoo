@@ -26,6 +26,7 @@ import WhytransportationModel, { TransportHeadingModel } from "../model/whyTrans
 // ✅ YEH SAHI HAI (Curly Braces lagayein):
 import ViyagooBannerModel, { DriverInquiry, DriverPage } from "../model/DriverModel.js";
 import AboutBannerModel, { AboutUSModel } from "../model/AboutUSModel.js";
+import ContactModel from "../model/contactModel.js";
 
 
 
@@ -2293,6 +2294,30 @@ export const addaboutBanner = async (req, res, next) => {
     }
 };
 
+
+export const addContact = async (req, res, next) => {
+    try {
+        const { email,mobile,address } = req.body;
+        if (!email) return res.status(400).json({ success: false, message: "All field is required" });
+
+        const benefit = await ContactModel.findOneAndUpdate(
+            {},
+            { email,mobile,address },
+            {
+                new: true,
+                upsert: true,
+            }
+        );
+
+        res.status(201).json({
+            success: true,
+            message: "contact updated successfully",
+            data: benefit,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
 
 export const addServiceBanner = async (req, res, next) => {
     try {

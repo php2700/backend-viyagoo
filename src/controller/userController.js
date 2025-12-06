@@ -30,6 +30,7 @@ import BelieveModel from "../model/whyBelieveModel.js";
 // import DriverInquiry from "../model/DriverModel.js";
 import ViyagooBannerModel, { DriverPage, DriverInquiry } from "../model/DriverModel.js";
 import AboutBannerModel, { AboutUSModel } from "../model/AboutUSModel.js";
+import ContactModel from "../model/contactModel.js";
 
 
 
@@ -702,6 +703,28 @@ export const getaboutBanner = async (req, res, next) => {
         res.status(200).json({
             success: true,
             message: "Banner fetched successfully",
+            data: banner,
+        });
+    } catch (error) {
+        console.error("Error fetching banner:", error);
+        next(error);
+    }
+};
+
+export const getContact = async (req, res, next) => {
+    try {
+        const banner = await ContactModel.findOne();
+
+        if (!banner) {
+            return res.status(404).json({
+                success: false,
+                message: "No contact found",
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            message: "contact fetched successfully",
             data: banner,
         });
     } catch (error) {
