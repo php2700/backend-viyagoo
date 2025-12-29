@@ -27,6 +27,7 @@ import WhytransportationModel, { TransportHeadingModel } from "../model/whyTrans
 import ViyagooBannerModel, { DriverInquiry, DriverPage } from "../model/DriverModel.js";
 import AboutBannerModel, { AboutUSModel } from "../model/AboutUSModel.js";
 import ContactModel from "../model/contactModel.js";
+import  { deleteImage } from "../utils/deleteImage.js"
 
 
 
@@ -58,33 +59,56 @@ export const addBanner = async (req, res, next) => {
 
         const existingBanner = await BannerModel.findOne();
 
+        // if (existingBanner) {
+
+        //     const oldFile =
+        //         fileType === "image"
+        //             ? existingBanner.image
+        //             : existingBanner.video;
+
+        //     if (
+        //         oldFile &&
+        //         fs.existsSync(oldFile) &&
+        //         fs.lstatSync(oldFile).isFile()
+        //     ) {
+        //         fs.unlinkSync(oldFile);
+        //     }
+
+        //     existingBanner.image = fileType === "image" ? filePath : "";
+        //     existingBanner.video = fileType === "video" ? filePath : "";
+        //     existingBanner.type = fileType;
+
+        //     await existingBanner.save();
+
+        //     return res.status(200).json({
+        //         success: true,
+        //         message: "Banner updated successfully",
+        //         data: existingBanner,
+        //     });
+        // }
         if (existingBanner) {
 
-            const oldFile =
-                fileType === "image"
-                    ? existingBanner.image
-                    : existingBanner.video;
+    const oldFile =
+        fileType === "image"
+            ? existingBanner.image
+            : existingBanner.video;
 
-            if (
-                oldFile &&
-                fs.existsSync(oldFile) &&
-                fs.lstatSync(oldFile).isFile()
-            ) {
-                fs.unlinkSync(oldFile);
-            }
 
-            existingBanner.image = fileType === "image" ? filePath : "";
-            existingBanner.video = fileType === "video" ? filePath : "";
-            existingBanner.type = fileType;
+    deleteImage(oldFile);
 
-            await existingBanner.save();
+    existingBanner.image = fileType === "image" ? filePath : "";
+    existingBanner.video = fileType === "video" ? filePath : "";
+    existingBanner.type = fileType;
 
-            return res.status(200).json({
-                success: true,
-                message: "Banner updated successfully",
-                data: existingBanner,
-            });
-        }
+    await existingBanner.save();
+
+    return res.status(200).json({
+        success: true,
+        message: "Banner updated successfully",
+        data: existingBanner,
+    });
+}
+
 
         const banner = await BannerModel.create({
             image: fileType === "image" ? filePath : "",
@@ -123,28 +147,52 @@ export const addAbout = async (req, res, next) => {
             imagePath = `public/uploads/${req.file.filename}`;
         }
 
-        if (existingAbout) {
-            if (req.file && existingAbout.image) {
-                const oldImagePath = path.join("public", existingAbout.image);
-                if (fs.existsSync(oldImagePath)) {
-                    fs.unlinkSync(oldImagePath);
-                }
-                existingAbout.image = imagePath;
-            }
-            existingAbout.heading = heading
-            existingAbout.title = title;
-            existingAbout.description = description;
+        // if (existingAbout) {
+        //     if (req.file && existingAbout.image) {
+        //         const oldImagePath = path.join("public", existingAbout.image);
+        //         if (fs.existsSync(oldImagePath)) {
+        //             fs.unlinkSync(oldImagePath);
+        //         }
+        //         existingAbout.image = imagePath;
+        //     }
+        //     existingAbout.heading = heading
+        //     existingAbout.title = title;
+        //     existingAbout.description = description;
 
-            await existingAbout.save();
+        //     await existingAbout.save();
 
-            return res.status(200).json({
-                success: true,
-                message: req.file
-                    ? "About Us updated successfully with new image"
-                    : "About Us updated successfully",
-                data: existingAbout,
-            });
-        }
+        //     return res.status(200).json({
+        //         success: true,
+        //         message: req.file
+        //             ? "About Us updated successfully with new image"
+        //             : "About Us updated successfully",
+        //         data: existingAbout,
+        //     });
+        // }
+        if (existingBanner) {
+
+    const oldFile =
+        fileType === "image"
+            ? existingBanner.image
+            : existingBanner.video;
+
+    if (oldFile) {
+        deleteImage(oldFile);
+    }
+
+    existingBanner.image = fileType === "image" ? filePath : "";
+    existingBanner.video = fileType === "video" ? filePath : "";
+    existingBanner.type = fileType;
+
+    await existingBanner.save();
+
+    return res.status(200).json({
+        success: true,
+        message: "Banner updated successfully",
+        data: existingBanner,
+    });
+}
+
 
         if (!req.file) {
             return res.status(400).json({
@@ -475,8 +523,10 @@ export const editBenefit = async (req, res, next) => {
         // If new image is uploaded, remove old image
         if (req.file) {
             if (benefit.image) {
-                const oldPath = path.join("public", benefit.image);
-                if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
+                   deleteImage(benefit.image);
+                   //working
+                // const oldPath = path.join("public", benefit.image);
+                // if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
             }
             benefit.image = `public/uploads/${req.file.filename}`;
         }
@@ -505,8 +555,9 @@ export const deleteBenefit = async (req, res, next) => {
 
         // Remove image if exists
         if (benefit.image) {
-            const imagePath = path.join("public", benefit.image);
-            if (fs.existsSync(imagePath)) fs.unlinkSync(imagePath);
+              deleteImage(benefit.image);
+            // const imagePath = path.join("public", benefit.image);
+            // if (fs.existsSync(imagePath)) fs.unlinkSync(imagePath);
         }
 
         await BenefitModel.findByIdAndDelete(id);
@@ -560,8 +611,9 @@ export const editSaving = async (req, res, next) => {
         // Replace old image if new one uploaded
         if (req.file) {
             if (saving.image) {
-                const oldPath = path.join("public", saving.image);
-                if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
+                 deleteImage(saving.image);
+                // const oldPath = path.join("public", saving.image);
+                // if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
             }
             saving.image = `public/uploads/${req.file.filename}`;
         }
@@ -590,8 +642,9 @@ export const deleteSaving = async (req, res, next) => {
             return res.status(404).json({ success: false, message: "Saving not found" });
 
         if (saving.image) {
-            const imagePath = path.join("public", saving.image);
-            if (fs.existsSync(imagePath)) fs.unlinkSync(imagePath);
+             deleteImage(saving.image);
+            // const imagePath = path.join("public", saving.image);
+            // if (fs.existsSync(imagePath)) fs.unlinkSync(imagePath);
         }
 
         await SavingModel.findByIdAndDelete(id);
@@ -645,8 +698,9 @@ export const editSecurity = async (req, res, next) => {
         // Replace old image if new one uploaded
         if (req.file) {
             if (saving.image) {
-                const oldPath = path.join("public", saving.image);
-                if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
+                 deleteImage(saving.image);
+                // const oldPath = path.join("public", saving.image);
+                // if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
             }
             saving.image = `public/uploads/${req.file.filename}`;
         }
@@ -675,8 +729,9 @@ export const deleteSecurity = async (req, res, next) => {
             return res.status(404).json({ success: false, message: "Saving not found" });
 
         if (saving.image) {
-            const imagePath = path.join("public", saving.image);
-            if (fs.existsSync(imagePath)) fs.unlinkSync(imagePath);
+             deleteImage(saving.image);
+            // const imagePath = path.join("public", saving.image);
+            // if (fs.existsSync(imagePath)) fs.unlinkSync(imagePath);
         }
 
         await SecurityModel.findByIdAndDelete(id);
@@ -809,8 +864,9 @@ export const editStrength = async (req, res, next) => {
         if (req.file) {
             const newImage = `public/uploads/${req.file.filename}`;
             if (strategic.image) {
-                const oldPath = path.join("public", strategic.image);
-                if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
+                   deleteImage(strategic.image);
+                // const oldPath = path.join("public", strategic.image);
+                // if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
             }
             strategic.image = newImage;
         }
@@ -838,8 +894,9 @@ export const deleteStrength = async (req, res, next) => {
 
         // Remove image from uploads
         if (strategic.image) {
-            const imagePath = path.join("public", strategic.image);
-            if (fs.existsSync(imagePath)) fs.unlinkSync(imagePath);
+             deleteImage(strategic.image);
+            // const imagePath = path.join("public", strategic.image);
+            // if (fs.existsSync(imagePath)) fs.unlinkSync(imagePath);
         }
 
         await StrengthModel.findByIdAndDelete(id);
@@ -912,10 +969,11 @@ export const editCleient = async (req, res, next) => {
 
         // If new image uploaded, delete old one
         if (req.file) {
-            const oldPath = path.join("uploads", path.basename(client.image));
-            if (fs.existsSync(oldPath)) {
-                fs.unlinkSync(oldPath);
-            }
+             deleteImage(client.image);
+            // const oldPath = path.join("uploads", path.basename(client.image));
+            // if (fs.existsSync(oldPath)) {
+            //     fs.unlinkSync(oldPath);
+            // }
             client.image = `/uploads/${req.file.filename}`;
         }
 
@@ -941,10 +999,13 @@ export const deleteclient = async (req, res, next) => {
             return res.status(404).json({ success: false, message: "Client not found" });
         }
 
-        const oldPath = path.join("uploads", path.basename(client.image));
-        if (fs.existsSync(oldPath)) {
-            fs.unlinkSync(oldPath);
-        }
+        // const oldPath = path.join("uploads", path.basename(client.image));
+        // if (fs.existsSync(oldPath)) {
+        //     fs.unlinkSync(oldPath);
+        // }
+        if (client.image) {
+    deleteImage(client.image);
+}
 
         await ClientModel.findByIdAndDelete(id);
 
@@ -1129,9 +1190,11 @@ export const editWhySegment = async (req, res, next) => {
 
         // Remove old image if new one is uploaded
         if (req.file) {
-            if (existing.image && fs.existsSync(existing.image)) {
-                fs.unlinkSync(existing.image);
-            }
+               deleteImage(existing.image);
+            // if (existi
+            // ng.image && fs.existsSync(existing.image)) {
+            //     fs.unlinkSync(existing.image);
+            // }
             existing.image = `public/uploads/${req.file.filename}`;
         }
 
@@ -1163,8 +1226,11 @@ export const deleteWhySegment = async (req, res, next) => {
                 message: "Why EV Segment not found",
             });
         }
-        if (existing.image && fs.existsSync(existing.image)) {
-            fs.unlinkSync(existing.image);
+        // if (existing.image && fs.existsSync(existing.image)) {
+        //     fs.unlinkSync(existing.image);
+        // }
+           if (existing.image) {
+            deleteImage(existing.image);
         }
 
         await existing.deleteOne();
@@ -1222,9 +1288,12 @@ export const editSegmentFleet = async (req, res, next) => {
 
         // Remove old image if new one is uploaded
         if (req.file) {
-            if (existing.image && fs.existsSync(existing.image)) {
-                fs.unlinkSync(existing.image);
-            }
+              
+            deleteImage(existing.image);
+      
+            // if (existing.image && fs.existsSync(existing.image)) {
+            //     fs.unlinkSync(existing.image);
+            // }
             existing.image = `public/uploads/${req.file.filename}`;
         }
 
@@ -1255,9 +1324,12 @@ export const deleteSegmentFleet = async (req, res, next) => {
                 message: "Segment fleet not found",
             });
         }
-        if (existing.image && fs.existsSync(existing.image)) {
-            fs.unlinkSync(existing.image);
+           if (existing.image) {
+            deleteImage(existing.image);
         }
+        // if (existing.image && fs.existsSync(existing.image)) {
+        //     fs.unlinkSync(existing.image);
+        // }
 
         await existing.deleteOne();
 
@@ -1473,8 +1545,9 @@ export const updateChauferService = async (req, res, next) => {
 
         // update image & Remove old one
         if (req.file) {
-            const oldPath = item.image;
-            if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
+              deleteImage(item.image);
+            // const oldPath = item.image;
+            // if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
 
             item.image = `public/uploads/${req.file.filename}`;
         }
@@ -1555,9 +1628,10 @@ export const updateCorporate = async (req, res) => {
 
         // remove old image if new image uploaded
         if (newImage && existing.image) {
-            const oldPath = path.resolve(existing.image);
-            if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
-            existing.image = newImage;
+              deleteImage(existing.image);
+        //     const oldPath = path.resolve(existing.image);
+        //     if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
+        //     existing.image = newImage;
         }
 
         existing.title = title ?? existing.title;
@@ -1589,8 +1663,9 @@ export const deleteCorporate = async (req, res) => {
 
         // delete image from folder
         if (existing.image) {
-            const oldPath = path.resolve(existing.image);
-            if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
+       deleteImage(existing.image);
+            // const oldPath = path.resolve(existing.image);
+            // if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
         }
 
         await existing.deleteOne();
@@ -1645,9 +1720,10 @@ export const updateViyagooEdgeDetail = async (req, res) => {
 
         // Remove old image if new one uploaded
         if (newImage && existing.image) {
-            const oldPath = path.resolve(existing.image);
-            if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
-            existing.image = newImage;
+             deleteImage(existing.image);
+            // const oldPath = path.resolve(existing.image);
+            // if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
+            // existing.image = newImage;
         }
 
         existing.description = description ?? existing.description;
@@ -1677,8 +1753,9 @@ export const deleteViyagooEdgeDetail = async (req, res) => {
 
         // delete image
         if (existing.image) {
-            const oldPath = path.resolve(existing.image);
-            if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
+             deleteImage(existing.image);
+            // const oldPath = path.resolve(existing.image);
+            // if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
         }
 
         await existing.deleteOne();
@@ -1820,9 +1897,10 @@ export const updateWhyTransportation = async (req, res) => {
             return res.status(404).json({ success: false, message: "Record not found" });
 
         if (req.file) {
-            if (existing.image && fs.existsSync(existing.image)) {
-                fs.unlinkSync(existing.image);
-            }
+             deleteImage(existing.image);
+            // if (existing.image && fs.existsSync(existing.image)) {
+            //     fs.unlinkSync(existing.image);
+            // }
             existing.image = req.file.path;
         }
 
@@ -1903,11 +1981,12 @@ export const updateBusinessTransportation = async (req, res) => {
             return res.status(404).json({ success: false, message: "Record not found" });
 
         if (req.file) {
-            const oldImageFullPath = path.join(process.cwd(), existing.image);
+             deleteImage(existing.image);
+            // const oldImageFullPath = path.join(process.cwd(), existing.image);
 
-            if (fs.existsSync(oldImageFullPath)) {
-                fs.unlinkSync(oldImageFullPath);
-            }
+            // if (fs.existsSync(oldImageFullPath)) {
+            //     fs.unlinkSync(oldImageFullPath);
+            // }
 
             existing.image = "public/uploads/" + req.file.filename;
         }
@@ -1939,9 +2018,13 @@ export const deleteBusinessTransportation = async (req, res) => {
 
         const fullPath = path.join(process.cwd(), existing.image);
 
-        if (fs.existsSync(fullPath)) {
-            fs.unlinkSync(fullPath);
+       if (existing.image) {
+          deleteImage(existing.image);
+
         }
+        // if (fs.existsSync(fullPath)) {
+        //     fs.unlinkSync(fullPath);
+        // }
 
         await BusinessTransportationModel.findByIdAndDelete(id);
 
@@ -1968,11 +2051,13 @@ export const addFutureMobility = async (req, res) => {
         if (existing) {
             // If new image uploaded → remove old image
             if (req.file) {
-                const oldImagePath = path.join(process.cwd(), existing.image);
+                 deleteImage(existing.image);
+                
+                // const oldImagePath = path.join(process.cwd(), existing.image);
 
-                if (fs.existsSync(oldImagePath)) {
-                    fs.unlinkSync(oldImagePath);
-                }
+                // if (fs.existsSync(oldImagePath)) {
+                //     fs.unlinkSync(oldImagePath);
+                // }
 
                 existing.image = "public/uploads/" + req.file.filename;
             }
@@ -2042,10 +2127,11 @@ export const updateFututreDetail = async (req, res) => {
             return res.status(404).json({ success: false, message: "Record not found" });
 
         if (req.file) {
-            const oldPath = path.join(process.cwd(), existing.image);
-            if (fs.existsSync(oldPath)) {
-                fs.unlinkSync(oldPath);
-            }
+             deleteImage(existing.image);
+            // const oldPath = path.join(process.cwd(), existing.image);
+            // if (fs.existsSync(oldPath)) {
+            //     fs.unlinkSync(oldPath);
+            // }
             existing.image = "public/uploads/" + req.file.filename;
         }
 
@@ -2073,8 +2159,10 @@ export const deleteFututreDetail = async (req, res) => {
             return res.status(404).json({ success: false, message: "Record not found" });
 
         // Remove image file
-        const oldPath = path.join(process.cwd(), existing.image);
-        if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
+        if(existing.image){
+         deleteImage(existing.image);}
+        // const oldPath = path.join(process.cwd(), existing.image);
+        // if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
 
         await FutureMobilityDetailModel.findByIdAndDelete(id);
 
@@ -2196,10 +2284,11 @@ export const updateAboutData = async (req, res) => {
 
                 // delete old image if exists
                 if (oldPath) {
-                    const fullOldPath = path.join(process.cwd(), oldPath);
-                    if (fs.existsSync(fullOldPath)) {
-                        fs.unlinkSync(fullOldPath);
-                    }
+                       deleteImage(oldPath);
+                    // const fullOldPath = path.join(process.cwd(), oldPath);
+                    // if (fs.existsSync(fullOldPath)) {
+                    //     fs.unlinkSync(fullOldPath);
+                    // }
                 }
 
                 // set new image
@@ -2246,11 +2335,19 @@ export const updateAboutData = async (req, res) => {
 };
 
 export const addaboutBanner = async (req, res, next) => {
+        const { title, subtitle, type } = req.body;
+
     try {
         if (!req.file) {
             return res.status(400).json({
                 success: false,
                 message: "Banner file is required",
+            });
+        }
+        if (!title || !subtitle) {
+            return res.status(400).json({
+                success: false,
+                message: "Title and Subtitle are required",
             });
         }
 
@@ -2260,14 +2357,17 @@ export const addaboutBanner = async (req, res, next) => {
 
         if (existingBanner) {
             // delete old file
-            const oldPath = path.join("public", existingBanner.banner);
+               deleteImage(existingBanner);
+            // const oldPath = path.join("public", existingBanner.banner);
 
-            if (fs.existsSync(oldPath)) {
-                fs.unlinkSync(oldPath);
-            }
+            // if (fs.existsSync(oldPath)) {
+            //     fs.unlinkSync(oldPath);
+            // }
 
             // update with new banner
             existingBanner.banner = bannerPath;
+             existingBanner.title = title;
+            existingBanner.subtitle = subtitle;
             await existingBanner.save();
 
             return res.status(200).json({
@@ -2280,6 +2380,9 @@ export const addaboutBanner = async (req, res, next) => {
         // create new banner
         const banner = await AboutBannerModel.create({
             banner: bannerPath,
+             type,
+      title,
+      subtitle,
         });
 
         return res.status(201).json({
@@ -2334,11 +2437,12 @@ export const addServiceBanner = async (req, res, next) => {
 
         if (existingBanner) {
             // delete old file
-            const oldPath = path.join("public", existingBanner.banner);
+            // const oldPath = path.join("public", existingBanner.banner);
 
-            if (fs.existsSync(oldPath)) {
-                fs.unlinkSync(oldPath);
-            }
+            // if (fs.existsSync(oldPath)) {
+            //     fs.unlinkSync(oldPath);
+            // }
+           deleteImage(existingBanner);
 
             // update with new banner
             existingBanner.banner = bannerPath;
@@ -2385,12 +2489,12 @@ export const addHomeBgBanner = async (req, res, next) => {
 
         if (existingBanner) {
             // delete old file
-            const oldPath = path.join("public", existingBanner.banner);
+            // const oldPath = path.join("public", existingBanner.banner);
 
-            if (fs.existsSync(oldPath)) {
-                fs.unlinkSync(oldPath);
-            }
-
+            // if (fs.existsSync(oldPath)) {
+            //     fs.unlinkSync(oldPath);
+            // }
+ deleteImage(existingBanner);
             // update with new banner
             existingBanner.banner = bannerPath;
             existingBanner.heading = heading
@@ -2435,11 +2539,12 @@ export const addviyagooBanner = async (req, res, next) => {
 
         if (existingBanner) {
             // delete old file
-            const oldPath = path.join("public", existingBanner.banner);
+             deleteImage(existingBanner);
+            // const oldPath = path.join("public", existingBanner.banner);
 
-            if (fs.existsSync(oldPath)) {
-                fs.unlinkSync(oldPath);
-            }
+            // if (fs.existsSync(oldPath)) {
+            //     fs.unlinkSync(oldPath);
+            // }
 
             // update with new banner
             existingBanner.banner = bannerPath;
