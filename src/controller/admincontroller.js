@@ -2246,7 +2246,7 @@ export const updateAboutData = async (req, res) => {
 };
 
 export const addaboutBanner = async (req, res, next) => {
-        const { title, subtitle, type } = req.body;
+        const { type } = req.body;
 
     try {
         if (!req.file) {
@@ -2255,12 +2255,7 @@ export const addaboutBanner = async (req, res, next) => {
                 message: "Banner file is required",
             });
         }
-        if (!title || !subtitle) {
-            return res.status(400).json({
-                success: false,
-                message: "Title and Subtitle are required",
-            });
-        }
+       
 
         const bannerPath = `public/uploads/${req.file.filename}`;
 
@@ -2276,8 +2271,8 @@ export const addaboutBanner = async (req, res, next) => {
 
             // update with new banner
             existingBanner.banner = bannerPath;
-             existingBanner.title = title;
-            existingBanner.subtitle = subtitle;
+            //  existingBanner.title = title;
+            // existingBanner.subtitle = subtitle;
             await existingBanner.save();
 
             return res.status(200).json({
@@ -2291,8 +2286,7 @@ export const addaboutBanner = async (req, res, next) => {
         const banner = await AboutBannerModel.create({
             banner: bannerPath,
              type,
-      title,
-      subtitle,
+   
         });
 
         return res.status(201).json({
