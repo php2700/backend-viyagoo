@@ -27,7 +27,7 @@ import WhytransportationModel, { TransportHeadingModel } from "../model/whyTrans
 import ViyagooBannerModel, { DriverInquiry, DriverPage } from "../model/DriverModel.js";
 import AboutBannerModel, { AboutUSModel } from "../model/AboutUSModel.js";
 import ContactModel from "../model/contactModel.js";
-
+import FAQSection from "../model/FaqModel.js";
 
 
 
@@ -2472,6 +2472,245 @@ export const addviyagooBanner = async (req, res, next) => {
 
     } catch (error) {
         console.error("Error in addaboutBanner:", error);
+        next(error);
+    }
+};
+
+// ==================== FAQ Controllers ====================
+
+
+export const addFaqHeading = async (req, res, next) => {
+    try {
+        const { heading, subtitle } = req.body;
+
+        if (!heading) {
+            return res.status(400).json({
+                success: false,
+                message: "Heading is required",
+            });
+        }
+
+        const faqSection = await FAQSection.findOneAndUpdate(
+            {},
+            { heading, subtitle },
+            {
+                new: true,
+                upsert: true, 
+            }
+        );
+
+        res.status(200).json({
+            success: true,
+            message: "FAQ heading updated successfully",
+            data: faqSection,
+        });
+    } catch (error) {
+        console.error("Error in addFaqHeading:", error);
+        next(error);
+    }
+};
+
+// Get entire FAQ section (for admin panel list + heading)
+export const getFaqHeading = async (req, res, next) => {
+    try {
+        let faqSection = await FAQSection.findOne();
+
+        // If no document exists, create one with default values
+        if (!faqSection) {
+            faqSection = await FAQSection.create({
+                heading: "Frequently Asked Questions",
+                subtitle: "",
+                faqs: [],
+            });
+        }
+
+        // Sort FAQs by order field
+        faqSection.faqs.sort((a, b) => a.order - b.order);
+
+        res.status(200).json({
+            success: true,
+            data: faqSection,
+        });
+    } catch (error) {
+        console.error("Error in getFaqHeading:", error);
+        next(error);
+    }
+};
+
+// Get only FAQs array (if needed separately)
+export const getFaqs = async (req, res, next) => {
+    try {
+        let faqSection = await FAQSection.findOne();
+
+        if (!faqSection) {
+            faqSection = await FAQSection.create({
+                heading: "Frequently Asked Questions",
+                faqs: [],
+            });
+        }
+
+        const sortedFaqs = faqSection.faqs.sort((a, b) => a.order - b.order);
+
+        res.status(200).json({
+            success: true,
+            data: sortedFaqs,
+        });
+    } catch (error) {
+        console.error("Error in getFaqs:", error);
+        next(error);
+    }
+};
+
+// Add new FAQ item
+export const addFaq = async (req, res, next) => {
+    try {
+        const { question, answer, order } = req.body;
+
+        if (!question || !answer) {
+            return res.status(400).json({
+                success: false,
+                message: "Question and answer are required",
+            });
+        }
+
+        let faqSection = await FAQSection.findOne();
+
+        if (!faqSection) {
+            faqSection = await FAQSection.create({
+                heading: "Frequently Asked Questions",
+                faqs: [],
+            });
+        }
+
+    
+        faqSection.faqs.push({
+            question,
+            answer,
+            order: order || faqSection.faqs.length, 
+        });
+
+        await faqSection.save();
+
+        // Return only the newly added FAQ
+        const newFaq = faqSection.faqs[faqSection.faqs.length - 1];
+
+        res.status(201).json({
+            success: true,
+            message: "FAQ added successfully",
+            data: newFaq,
+        });
+    } catch (error) {
+        console.error("Error in addFaq:", error);
+        next(error);
+    }
+};
+
+// Update existing FAQ
+export const updateFaq = async (req, res, next) => {
+    try {
+        const { id } = req.params; 
+        const { question, answer, order } = req.body;
+
+        if (!question || !answer) {
+            return res.status(400).json({
+                success: false,
+                message: "Question and answer are required",
+            });
+        }
+
+        const faqSection = await FAQSection.findOne();
+
+        if (!faqSection) {
+            return res.status(404).json({
+                success: false,
+                message: "FAQ section not found",
+            });
+        }
+
+        // Find the sub-document by _id
+        const faqItem = faqSection.faqs.id(id);
+
+        if (!faqItem) {
+            return res.status(404).json({
+                success: false,
+                message: "FAQ not found",
+            });
+        }
+
+        faqItem.question = question;
+        faqItem.answer = answer;
+        if (order !== undefined) faqItem.order = order;
+
+        await faqSection.save();
+
+        res.status(200).json({
+            success: true,
+            message: "FAQ updated successfully",
+            data: faqItem,
+        });
+    } catch (error) {
+        console.error("Error in updateFaq:", error);
+        next(error);
+    }
+};
+
+// Delete FAQ
+// export const deleteFaq = async (req, res, next) => {
+//     try {
+//         const { id } = req.params;
+
+//         const faqSection = await FAQSection.findOne();
+
+//         if (!faqSection) {
+//             return res.status(404).json({
+//                 success: false,
+//                 message: "FAQ section not found",
+//             });
+//         }
+
+//         const faqItem = faqSection.faqs.id(id);
+
+//         if (!faqItem) {
+//             return res.status(404).json({
+//                 success: false,
+//                 message: "FAQ not found",
+//             });
+//         }
+
+//         faqItem.remove(); // removes sub-document
+//         await faqSection.save();
+
+//         res.status(200).json({
+//             success: true,
+//             message: "FAQ deleted successfully",
+//         });
+//     } catch (error) {
+//         console.error("Error in deleteFaq:", error);
+//         next(error);
+//     }
+// };
+export const deleteFaq = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+
+        const result = await FAQSection.updateOne(
+            {},
+            { $pull: { faqs: { _id: id } } }
+        );
+
+        if (result.modifiedCount === 0) {
+            return res.status(404).json({
+                success: false,
+                message: "FAQ not found",
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            message: "FAQ deleted successfully",
+        });
+    } catch (error) {
+        console.error("Error in deleteFaq:", error);
         next(error);
     }
 };

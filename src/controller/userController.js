@@ -31,6 +31,7 @@ import BelieveModel from "../model/whyBelieveModel.js";
 import ViyagooBannerModel, { DriverPage, DriverInquiry } from "../model/DriverModel.js";
 import AboutBannerModel, { AboutUSModel } from "../model/AboutUSModel.js";
 import ContactModel from "../model/contactModel.js";
+import FAQSection from "../model/FaqModel.js";
 
 
 
@@ -796,5 +797,67 @@ export const getViyagooBanner = async (req, res, next) => {
     } catch (error) {
         console.error("Error fetching banner:", error);
         next(error);
+    }
+};
+
+
+// Public API: Heading + Subtitle + All FAQs (ek call mein sab kuch — recommended)
+export const getPublicFaqHeading = async (req, res) => {
+    try {
+        let faqSection = await FAQSection.findOne();
+
+        // Agar pehli baar hai to default create kar do (jaise aapke baaki sections mein hota hai)
+        if (!faqSection) {
+            faqSection = await FAQSection.create({
+                heading: "Frequently Asked Questions",
+                subtitle: "",
+                faqs: []
+            });
+        }
+
+        // FAQs ko order ke hisab se sort kar do
+        const sortedFaqs = [...faqSection.faqs].sort((a, b) => a.order - b.order);
+
+        res.status(200).json({
+            success: true,
+            data: {
+                heading: faqSection.heading,
+                subtitle: faqSection.subtitle || "",
+                faqs: sortedFaqs
+            }
+        });
+    } catch (error) {
+        console.error("Error in getPublicFaqHeading:", error);
+        res.status(500).json({
+            success: false,
+            message: "Server error"
+        });
+    }
+};
+
+// Public API: Sirf FAQs array (agar frontend alag se chahiye)
+export const getPublicFaqs = async (req, res) => {
+    try {
+        let faqSection = await FAQSection.findOne();
+
+        if (!faqSection) {
+            faqSection = await FAQSection.create({
+                heading: "Frequently Asked Questions",
+                faqs: []
+            });
+        }
+
+        const sortedFaqs = [...faqSection.faqs].sort((a, b) => a.order - b.order);
+
+        res.status(200).json({
+            success: true,
+            data: sortedFaqs
+        });
+    } catch (error) {
+        console.error("Error in getPublicFaqs:", error);
+        res.status(500).json({
+            success: false,
+            message: "Server error"
+        });
     }
 };

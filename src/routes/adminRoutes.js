@@ -1,7 +1,14 @@
 import { Router } from "express";
 import { authentication } from "../middleware/authentication.js";
 import { authorization } from "../middleware/authorization.js";
-import { addAbout, addBanner, addBelieveTransportation, addBenefit, addBusinessTransportation, addChaufer, addChauferService, addClients, addCorporate, addEvSegment, addFutureMobility, addFututreDetail, addLogistic, addSaving, addSegmentFleet, addSetUsPart, addStragicStrength, addTestimonial, addViyagooEdge, addViyagooEdgeDetail, addWhySegment, addWhyTransportation, deleteBenefit, deleteBusinessTransportation, deleteChauferService, deleteclient, deleteCorporate, deleteFututreDetail, deleteSaving, deleteSegmentFleet, deleteStrength, deleteTestimonial, deleteViyagooEdgeDetail, deleteWhySegment, deleteWhyTransportation, editBenefit, editCleient, editSaving, editSegmentFleet, editStrength, editTestimonial, editWhySegment, updateBusinessTransportation, updateChauferService, updateCorporate, updateFututreDetail, updateViyagooEdgeDetail, updateWhyTransportation, upsertTransportation ,driverinquiries,driverpagecontent,updatedriverpage,getAboutData,updateAboutData, editSecurity, addSecurity, deleteSecurity, addaboutBanner, addviyagooBanner, addServiceBanner, addHomeBgBanner, addBenefitHeading, addSecurityHeading, addStrageticHeading, addClientHeading, addTestimonialHeading, addWhySegmentHeading, addSegmentFleetHeading, addChaufferServiceHeading, addCorporateHeading, addWhyTransHeading, addBusinessHeading, addContact} from "../controller/admincontroller.js";
+import { addAbout, addBanner, addBelieveTransportation, addBenefit, addBusinessTransportation, addChaufer, addChauferService, addClients, addCorporate, addEvSegment, addFutureMobility, addFututreDetail, addLogistic, addSaving, addSegmentFleet, addSetUsPart, addStragicStrength, addTestimonial, addViyagooEdge, addViyagooEdgeDetail, addWhySegment, addWhyTransportation, deleteBenefit, deleteBusinessTransportation, deleteChauferService, deleteclient, deleteCorporate, deleteFututreDetail, deleteSaving, deleteSegmentFleet, deleteStrength, deleteTestimonial, deleteViyagooEdgeDetail, deleteWhySegment, deleteWhyTransportation, editBenefit, editCleient, editSaving, editSegmentFleet, editStrength, editTestimonial, editWhySegment, updateBusinessTransportation, updateChauferService, updateCorporate, updateFututreDetail, updateViyagooEdgeDetail, updateWhyTransportation, upsertTransportation ,driverinquiries,driverpagecontent,updatedriverpage,getAboutData,updateAboutData, editSecurity, addSecurity, deleteSecurity, addaboutBanner, addviyagooBanner, addServiceBanner, addHomeBgBanner, addBenefitHeading, addSecurityHeading, addStrageticHeading, addClientHeading, addTestimonialHeading, addWhySegmentHeading, addSegmentFleetHeading, addChaufferServiceHeading, addCorporateHeading, addWhyTransHeading, addBusinessHeading, addContact,
+addFaqHeading, 
+    getFaqHeading, 
+    getFaqs, 
+    addFaq, 
+    updateFaq, 
+    deleteFaq
+} from "../controller/admincontroller.js";
 import upload from '../middleware/upload.js';
 import { getAbout, getaboutBanner, getBanner, getBelieveTransportation, getBenefit, getBenefitHeading, getBusinessHeading, getBusinessTransportation, getChaufer, getChauferService, getchaufferServiceHeading, getClientHeading, getClients, getContact, getCorporate, getCorporateHeading, getEvSegment, getFutureMobility, getFututreDetail, getHomeBgBanner, getLogistic, getSaving, getSecurity, getSecurityHeading, getSegmentFleet, getSegmentFleetHeading, getServiceBanner, getSetData, getStrageticHeading, getStrength, getTestimonialHeading, getTestimonials, getTransportation, getViyagooBanner, getViyagooEdge, getViyagooEdgeDetail, getWhySegment, getWhySegmentHeading, getWhyTransportation, getWhyTransportHeading, Login, quotelist, } from "../controller/userController.js";
 import uploadVideo from "../middleware/videoupload.js";
@@ -207,6 +214,15 @@ adminRouter.post('/aboutUS', authentication, authorization(['admin']),upload.fie
 /*------------------contact------------------*/
 adminRouter.get('/contact', authentication, authorization(['admin']), getContact)
 adminRouter.post('/contact', authentication, authorization(['admin']), addContact)
+/*====================== FAQ Section Start ======================*/
+
+adminRouter.get('/faq-heading', authentication, authorization(['admin']), getFaqHeading);
+adminRouter.post('/faq-heading', authentication, authorization(['admin']), addFaqHeading);
+
+adminRouter.get('/faqs', authentication, authorization(['admin']), getFaqs);                   
+adminRouter.post('/faq', authentication, authorization(['admin']), addFaq);                     
+adminRouter.patch('/faq/:id', authentication, authorization(['admin']), updateFaq);             
+adminRouter.delete('/faq/:id', authentication, authorization(['admin']), deleteFaq);
 
 
 export default adminRouter

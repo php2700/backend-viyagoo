@@ -1,5 +1,8 @@
 import { Router } from "express";
-import { addQuote, getAbout, getBanner, getBenefit, getClients, getSaving, getSetData, getStrength, getAboutData, getTestimonials, addLocation, getLocations, getLogistic, getEvSegment, getWhySegment, getSegmentFleet, getChaufer, getChauferService, getCorporate, getViyagooEdge, getViyagooEdgeDetail, getTransportation, getWhyTransportation, getBusinessTransportation, getFutureMobility, getFututreDetail, getBelieveTransportation, driverpagecontent, submitdriverform, getSecurity, getaboutBanner, getViyagooBanner, getServiceBanner, getHomeBgBanner, getStrageticHeading, getClientHeading, getTestimonialHeading, getBenefitHeading, getSecurityHeading, getSegmentFleetHeading, getWhySegmentHeading, getchaufferServiceHeading, getCorporateHeading, getWhyTransportHeading, getBusinessHeading, getContact } from "../controller/userController.js";
+import { addQuote, getAbout, getBanner, getBenefit, getClients, getSaving, getSetData, getStrength, getAboutData, getTestimonials, addLocation, getLocations, getLogistic, getEvSegment, getWhySegment, getSegmentFleet, getChaufer, getChauferService, getCorporate, getViyagooEdge, getViyagooEdgeDetail, getTransportation, getWhyTransportation, getBusinessTransportation, getFutureMobility, getFututreDetail, getBelieveTransportation, driverpagecontent, submitdriverform, getSecurity, getaboutBanner, getViyagooBanner, getServiceBanner, getHomeBgBanner, getStrageticHeading, getClientHeading, getTestimonialHeading, getBenefitHeading, getSecurityHeading, getSegmentFleetHeading, getWhySegmentHeading, getchaufferServiceHeading, getCorporateHeading, getWhyTransportHeading, getBusinessHeading, getContact, 
+    getPublicFaqHeading, 
+    getPublicFaqs
+} from "../controller/userController.js";
 
 const userRouter = Router();
 
@@ -61,8 +64,10 @@ userRouter.post("/submit-driver-form", submitdriverform)
 userRouter.get('/get-about-banner', getaboutBanner)
 userRouter.get('/aboutUS', getAboutData)
 
-
+userRouter.get('/faq-heading', getPublicFaqHeading);
+userRouter.get('/faqs', getPublicFaqs);
 userRouter.get('/contact',  getContact)
+
 
 
 export default userRouter;
